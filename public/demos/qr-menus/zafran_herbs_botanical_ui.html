@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zafran - Botanical Ledger</title>
+    <link rel="stylesheet" href="/demos/mockups.css">
+    <script src="/demos/mockup-autoscroll.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+
+    <style>
+        body {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+        /* Micro-noise texture for an organic, unbleached paper feel */
+        .paper-texture {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 50;
+            mix-blend-mode: multiply;
+        }
+
+        /* Hide scrollbar for pure mockup aesthetics */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom dot leader for the ledger items */
+        .ledger-dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted #C4CBBF;
+            margin: 0 12px;
+            position: relative;
+            top: -6px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="mockup-theme--qr-zafran min-h-screen flex items-center justify-center p-0 text-white font-sans overflow-hidden">
+
+    <div class="relative w-[340px] h-[720px] bg-botanical-paper rounded-[3rem] border-[10px] border-[#F0EFEB] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15),inset_0_0_0_1px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)] flex-shrink-0 overflow-hidden ring-1 ring-black/5">
+        
+        <!-- Physical Hardware: Dynamic Island -->
+        <div class="absolute top-0 inset-x-0 h-7 flex justify-center z-50">
+            <div class="w-28 h-6 bg-black rounded-b-3xl relative top-[-2px]"></div>
+        </div>
+
+        <div class="paper-texture"></div>
+
+        <!-- Abstract Saffron Threads/Botanical Graphic (Background) -->
+        <svg class="absolute top-[-50px] left-[-50px] w-64 h-64 text-botanical-saffron/5 pointer-events-none transform -rotate-12" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50 0 C 60 40, 90 60, 100 100 C 60 80, 40 40, 0 0 Z" />
+            <path d="M40 10 C 50 50, 80 70, 90 110 C 50 90, 30 50, -10 10 Z" />
+            <path d="M60 -10 C 70 30, 100 50, 110 90 C 70 70, 50 30, 10 -10 Z" />
+        </svg>
+
+        <div class="relative w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar pb-32">
+            
+            <header class="pt-20 px-6 pb-8 relative z-10 border-b border-botanical-lines">
+                <div class="flex flex-col items-center text-center">
+                    <!-- Minimalist Logo -->
+                    <div class="w-10 h-10 mb-4 relative flex justify-center items-center">
+                        <div class="absolute w-full h-full border border-botanical-saffron rounded-full opacity-20"></div>
+                        <div class="absolute w-2 h-2 bg-botanical-saffron rounded-full"></div>
+                        <svg class="w-6 h-6 text-botanical-saffron absolute -top-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C12 2 15 8 15 12C15 16 12 18 12 18C12 18 9 16 9 12C9 8 12 2 12 2Z"/></svg>
+                    </div>
+
+                    <h1 class="text-3xl font-light tracking-wide text-botanical-ink mb-1">زعــــفــــران</h1>
+                    <div class="font-mono text-[9px] tracking-[0.2em] text-botanical-faded uppercase">
+                        Botanical Index & Rare Spices
+                    </div>
+                </div>
+
+                <!-- Archival Tags (Filter) -->
+                <div class="flex gap-3 mt-8 overflow-x-auto no-scrollbar pb-2">
+                    <button class="px-4 py-1.5 rounded-full border border-botanical-saffron bg-botanical-saffron/5 text-botanical-saffron text-xs font-medium whitespace-nowrap">الكل</button>
+                    <button class="px-4 py-1.5 rounded-full border border-botanical-lines text-botanical-faded text-xs font-medium whitespace-nowrap">الزعفران</button>
+                    <button class="px-4 py-1.5 rounded-full border border-botanical-lines text-botanical-faded text-xs font-medium whitespace-nowrap">أعشاب برية</button>
+                    <button class="px-4 py-1.5 rounded-full border border-botanical-lines text-botanical-faded text-xs font-medium whitespace-nowrap">زيوت عطرية</button>
+                </div>
+            </header>
+
+            <main class="relative z-10 px-6 py-6">
+
+                
+                <!-- Category 1 -->
+                <section class="mb-10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="font-mono text-botanical-saffron text-[10px]">01</span>
+                        <h2 class="text-sm font-bold text-botanical-ink tracking-wide">الزعفران النقي</h2>
+                        <div class="flex-grow border-t border-botanical-lines"></div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        
+                        <!-- Item -->
+                        <div class="group flex items-end justify-between py-4 border-b border-botanical-lines border-dashed">
+                            <div class="flex-shrink-0">
+                                <h3 class="text-base text-botanical-ink font-medium leading-none mb-1.5">سوبر نقين ملكي</h3>
+                                <p class="text-[10px] text-botanical-faded">مقطوف يدوياً - خراسان</p>
+                            </div>
+                            
+                            <div class="ledger-dots"></div>
+
+                            <div class="text-left flex flex-col items-end flex-shrink-0">
+                                <div class="font-mono flex items-center gap-1.5">
+                                    <span class="text-[9px] text-botanical-faded">IQD</span>
+                                    <span class="text-botanical-ink text-sm">28,000</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-botanical-saffron border border-botanical-saffron/30 px-1.5 py-[1px] rounded-[3px] mt-1 bg-botanical-saffron/5">5 GRM</span>
+                            </div>
+                        </div>
+
+                        <!-- Item -->
+                        <div class="group flex items-end justify-between py-4 border-b border-botanical-lines border-dashed">
+                            <div class="flex-shrink-0">
+                                <h3 class="text-base text-botanical-ink font-medium leading-none mb-1.5">بوشال فاخر</h3>
+                                <p class="text-[10px] text-botanical-faded">خيوط كاملة - أفغانستان</p>
+                            </div>
+                            
+                            <div class="ledger-dots"></div>
+
+                            <div class="text-left flex flex-col items-end flex-shrink-0">
+                                <div class="font-mono flex items-center gap-1.5">
+                                    <span class="text-[9px] text-botanical-faded">IQD</span>
+                                    <span class="text-botanical-ink text-sm">15,500</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-botanical-saffron border border-botanical-saffron/30 px-1.5 py-[1px] rounded-[3px] mt-1 bg-botanical-saffron/5">5 GRM</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Category 2 -->
+                <section class="mb-10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="font-mono text-botanical-sage text-[10px]">02</span>
+                        <h2 class="text-sm font-bold text-botanical-ink tracking-wide">أعشاب وزهور</h2>
+                        <div class="flex-grow border-t border-botanical-lines"></div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        
+                        <!-- Item -->
+                        <div class="group flex items-end justify-between py-4 border-b border-botanical-lines border-dashed">
+                            <div class="flex-shrink-0">
+                                <h3 class="text-base text-botanical-ink font-medium leading-none mb-1.5">بابونج بري</h3>
+                                <p class="text-[10px] text-botanical-faded">زهور كاملة مجففة طبيعياً</p>
+                            </div>
+                            
+                            <div class="ledger-dots"></div>
+
+                            <div class="text-left flex flex-col items-end flex-shrink-0">
+                                <div class="font-mono flex items-center gap-1.5">
+                                    <span class="text-[9px] text-botanical-faded">IQD</span>
+                                    <span class="text-botanical-ink text-sm">6,000</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-botanical-sage border border-botanical-sage/50 text-botanical-ink px-1.5 py-[1px] rounded-[3px] mt-1 bg-botanical-sage/10">50 GRM</span>
+                            </div>
+                        </div>
+
+                        <!-- Item -->
+                        <div class="group flex items-end justify-between py-4 border-b border-botanical-lines border-dashed">
+                            <div class="flex-shrink-0">
+                                <h3 class="text-base text-botanical-ink font-medium leading-none mb-1.5">ورد محمدي</h3>
+                                <p class="text-[10px] text-botanical-faded">براعم عضوية نقية</p>
+                            </div>
+                            
+                            <div class="ledger-dots"></div>
+
+                            <div class="text-left flex flex-col items-end flex-shrink-0">
+                                <div class="font-mono flex items-center gap-1.5">
+                                    <span class="text-[9px] text-botanical-faded">IQD</span>
+                                    <span class="text-botanical-ink text-sm">4,500</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-botanical-sage border border-botanical-sage/50 text-botanical-ink px-1.5 py-[1px] rounded-[3px] mt-1 bg-botanical-sage/10">50 GRM</span>
+                            </div>
+                        </div>
+
+                        <!-- Item -->
+                        <div class="group flex items-end justify-between py-4 border-b border-botanical-lines border-dashed">
+                            <div class="flex-shrink-0">
+                                <h3 class="text-base text-botanical-ink font-medium leading-none mb-1.5">لبان ذكر عُماني</h3>
+                                <p class="text-[10px] text-botanical-faded">حوجري درجة أولى</p>
+                            </div>
+                            
+                            <div class="ledger-dots"></div>
+
+                            <div class="text-left flex flex-col items-end flex-shrink-0">
+                                <div class="font-mono flex items-center gap-1.5">
+                                    <span class="text-[9px] text-botanical-faded">IQD</span>
+                                    <span class="text-botanical-ink text-sm">12,000</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-botanical-sage border border-botanical-sage/50 text-botanical-ink px-1.5 py-[1px] rounded-[3px] mt-1 bg-botanical-sage/10">100 GRM</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <div class="mt-12 flex justify-center opacity-30">
+                    <div class="w-12 h-12 border border-botanical-ink rounded-full flex items-center justify-center relative transform -rotate-12">
+                        <div class="font-mono text-[6px] tracking-widest text-center leading-tight">
+                            EST<br>2024
+                        </div>
+                        <svg class="w-full h-full absolute inset-0 animate-[spin_20s_linear_infinite]" viewBox="0 0 100 100">
+                            <path id="curve" d="M 10 50 A 40 40 0 1 1 90 50 A 40 40 0 1 1 10 50" fill="transparent"/>
+                            <text class="text-[9px] font-mono uppercase" fill="currentColor">
+                                <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                                    • ORGANIC • BOTANICAL • PURE •
+                                </textPath>
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const screen = document.querySelector('.relative.w-full.h-full.overflow-y-auto');
+            if (!screen) return;
+
+            // ── 1. Handle Embed Mode (Screen Only) ──
+            if (window.location.search.includes('embed=true')) {
+                const phone = screen.parentElement;
+                if (phone) {
+                    // Reset class to clear phone border, notch, and shadow styles
+                    phone.className = "relative w-full h-full overflow-hidden z-10";
+                }
+                const notch = document.querySelector('.absolute.top-0.inset-x-0.h-7');
+                if (notch) notch.style.display = 'none';
+                
+                const content = screen.querySelector('[class*="pt-20"]') || screen.querySelector('[class*="pt-14"]');
+                if (content) {
+                    content.className = content.className
+                        .replace(/\bpt-(?:14|16|20|24)\b/g, 'pt-8');
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>

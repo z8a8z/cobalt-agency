@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════════════════════
+   Cobalt Agency — Global Design Tokens & Base Styles
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Cobalt Brand Palette ── */
+  --primary-hue: 215;
+  --primary-saturation: 100%;
+  --primary-lightness: 50%;
+  --primary-hsl: var(--primary-hue), var(--primary-saturation), var(--primary-lightness);
+  --primary: hsl(var(--primary-hsl));
+  --primary-hover: hsl(var(--primary-hue), 100%, 42%);
+  --primary-glow: hsla(var(--primary-hsl), 0.30);
+
+  /* Warm accent for CTAs — amber gold */
+  --accent-hue: 40;
+  --accent-hsl: var(--accent-hue), 100%, 50%;
+  --accent: hsl(var(--accent-hsl));
+  --accent-hover: hsl(var(--accent-hue), 100%, 42%);
+
+  /* ── Dark Surfaces — cobalt-infused neutrals ── */
+  --bg-hsl: var(--primary-hue), 12%, 4%;
+  --bg: hsl(var(--bg-hsl));
+  --bg-elevated-hsl: var(--primary-hue), 10%, 7%;
+  --bg-elevated: hsl(var(--bg-elevated-hsl));
+
+  --card-hsl: var(--primary-hue), 10%, 10%;
+  --card: hsl(var(--card-hsl));
+  --card-hover-hsl: var(--primary-hue), 10%, 13%;
+  --card-hover: hsl(var(--card-hover-hsl));
+
+  --border-hsl: var(--primary-hue), 8%, 16%;
+  --border: hsl(var(--border-hsl));
+
+  /* ── Text ── */
+  --text-primary-hsl: var(--primary-hue), 8%, 96%;
+  --text-primary: hsl(var(--text-primary-hsl));
+  --text-secondary-hsl: var(--primary-hue), 6%, 58%;
+  --text-secondary: hsl(var(--text-secondary-hsl));
+  --text-muted-hsl: var(--primary-hue), 4%, 40%;
+  --text-muted: hsl(var(--text-muted-hsl));
+
+  /* ── Shadows & Glass ── */
+  --shadow-ambient: 0 4px 24px hsla(var(--primary-hue), 12%, 2%, 0.5);
+  --shadow-elevation: 0 12px 48px hsla(var(--primary-hue), 12%, 2%, 0.7);
+  --glass-bg: hsla(var(--primary-hue), 12%, 6%, 0.75);
+  --glass-border: hsla(var(--primary-hue), 20%, 30%, 0.15);
+
+  /* ── Spacing (8px grid) ── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* ── Typography ── */
+  --font-ar: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  --font-en: 'Inter', 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* ── Transitions ── */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --duration-fast: 200ms;
+  --duration-normal: 350ms;
+  --duration-slow: 600ms;
+
+  /* ── Border Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+}
+
+/* ── CSS Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-ar);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100svh;
+}
+
+/* ── Base Typography ── */
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+p {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ── LTR overrides for numbers and emails ── */
+.ltr-text {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* ── Links ── */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Images ── */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Lists ── */
+ul, ol {
+  list-style: none;
+}
+
+/* ── Selection ── */
+::selection {
+  background: hsla(var(--primary-hsl), 0.3);
+  color: var(--text-primary);
+}
+
+/* ── Focus ── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Root container ── */
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}

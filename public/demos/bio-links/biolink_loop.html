@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bio Link Loop Animation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #3897f0;
+      --coffee: #D97706;
+      --bg:     #050505;
+      --surface:#111113;
+      --ig-bg:  #0a0a0a;
+      --muted:  #8e8e8e;
+      --border: rgba(255,255,255,0.12);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: transparent;
+      font-family: 'Cairo', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      color: #fff;
+    }
+
+    .scale-container {
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 360px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* ─── Root scene ─────────────────────────────────── */
+    .scene {
+      position: relative;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--ig-bg);
+    }
+
+    /* ─── PHASE 1: Instagram UI ──────────────────────── */
+    .ig-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .ig-screen.exit {
+      opacity: 0;
+      transform: translateY(-28px);
+      pointer-events: none;
+    }
+
+    /* Status bar */
+    .ig-statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .ig-statusbar-icons {
+      display: flex; gap: 5px; align-items: center;
+    }
+    .ig-statusbar-icons svg { opacity: 0.9; }
+
+    /* IG nav bar */
+    .ig-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .ig-topbar-username {
+      font-size: 15px;
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+    .ig-topbar-icons {
+      display: flex; gap: 14px; align-items: center;
+    }
+    .ig-topbar-icons svg { color: #fff; }
+
+    /* Profile header */
+    .ig-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 16px 14px;
+      flex-shrink: 0;
+    }
+    .ig-avatar-ring {
+      width: 74px; height: 74px;
+      border-radius: 50%;
+      padding: 2.5px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      flex-shrink: 0;
+    }
+    .ig-avatar-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: var(--ig-bg);
+      border: 2.5px solid var(--ig-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .ig-avatar-inner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .ig-stats {
+      display: flex; gap: 18px; flex: 1;
+    }
+    .ig-stat {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .ig-stat-num {
+      font-size: 15px; font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      color: #fff;
+    }
+    .ig-stat-label {
+      font-size: 11px; color: var(--muted);
+      font-family: -apple-system, sans-serif;
+    }
+
+    /* Bio area */
+    .ig-bio {
+      padding: 0 16px 10px;
+      flex-shrink: 0;
+    }
+    .ig-bio-name {
+      font-size: 13px; font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      color: #fff; margin-bottom: 3px;
+    }
+    .ig-bio-text {
+      font-size: 12px; color: rgba(255,255,255,0.72);
+      font-family: -apple-system, sans-serif;
+      line-height: 1.5;
+    }
+
+    /* ─── The bio link button ─── */
+    .ig-bio-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      color: var(--blue);
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .ig-bio-link svg { flex-shrink: 0; }
+
+    /* ripple that expands on click */
+    .ig-bio-link::after {
+      content: '';
+      position: absolute;
+      inset: -5px -8px;
+      border-radius: 8px;
+      background: rgba(56, 151, 240, 0.15);
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.25s, transform 0.3s;
+    }
+    .ig-bio-link.tapping::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Finger cursor */
+    .finger {
+      position: absolute;
+      width: 26px; height: 26px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      transform: scale(0.6);
+      transition:
+        left 0.55s cubic-bezier(0.25,1,0.5,1),
+        top  0.55s cubic-bezier(0.25,1,0.5,1),
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    }
+    .finger.visible  { opacity: 1; transform: scale(1); }
+    .finger.pressing { transform: scale(0.78); opacity: 0.95; }
+
+    /* Action buttons row */
+    .ig-actions {
+      display: flex; gap: 6px;
+      padding: 0 14px 12px;
+      flex-shrink: 0;
+    }
+    .ig-btn {
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      cursor: default;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .ig-btn--follow { flex: 1; background: var(--blue); border-color: var(--blue); }
+    .ig-btn--msg    { flex: 1; }
+    .ig-btn--more   { width: 30px; flex: none; }
+
+    /* Highlights row */
+    .ig-highlights {
+      display: flex; gap: 14px;
+      padding: 0 14px 12px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .ig-highlight {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      flex-shrink: 0;
+    }
+    .ig-highlight-ring {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      padding: 2px;
+      background: rgba(255,255,255,0.12);
+    }
+    .ig-highlight-circle {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ig-highlight-circle svg { color: var(--muted); }
+    .ig-highlight span {
+      font-size: 10px; color: var(--muted);
+      font-family: -apple-system, sans-serif;
+    }
+
+    /* Posts grid */
+    .ig-posts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      flex: 1;
+      overflow: hidden;
+    }
+    .ig-post {
+      aspect-ratio: 1;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .ig-post-shimmer {
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg,
+        transparent 20%,
+        rgba(255,255,255,0.04) 50%,
+        transparent 80%
+      );
+      animation: shimmer 2.2s ease-in-out infinite;
+      background-size: 200% 100%;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    /* Give each post a slightly different shade */
+    .ig-post:nth-child(2n)  { background: #161616; }
+    .ig-post:nth-child(3n)  { background: #0e0e0e; }
+
+    /* Coffee gradient tones for some cells */
+    .ig-post:nth-child(1)   { background: linear-gradient(135deg,#1a100a,#0a0805); }
+    .ig-post:nth-child(4)   { background: linear-gradient(135deg,#0d0d0d,#181007); }
+    .ig-post:nth-child(7)   { background: linear-gradient(135deg,#130d08,#080605); }
+
+    /* ─── Transition flash ──────────────────────────── */
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 50;
+      transition: opacity 0.15s ease;
+    }
+    .flash.on { opacity: 0.18; }
+
+    /* ─── PHASE 2: Bio Link page ────────────────────── */
+    .biolink-screen {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #050505;
+      opacity: 0;
+      transform: translateY(32px);
+      pointer-events: none;
+    }
+    .biolink-screen::-webkit-scrollbar { display: none; }
+
+    /* iframe fills the full screen */
+    .biolink-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: transparent;
+    }
+
+    /* ── Bio page internals ─── */
+    .bl-ambient-top {
+      position: absolute;
+      top: -10%;
+      left: 50%; transform: translateX(-50%);
+      width: 180%;
+      height: 260px;
+      background: radial-gradient(circle, rgba(120,53,15,0.38), transparent 68%);
+      filter: blur(42px);
+      pointer-events: none;
+    }
+    .bl-ambient-bot {
+      position: absolute;
+      bottom: 8%;
+      left: -10%;
+      width: 120%;
+      height: 200px;
+      background: radial-gradient(circle, rgba(217,119,6,0.1), transparent 66%);
+      filter: blur(52px);
+      pointer-events: none;
+    }
+    .bl-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 52px 20px 32px;
+      gap: 0;
+    }
+
+    /* Avatar */
+    .bl-avatar-ring {
+      width: 82px; height: 82px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, #d97706 0%, #78350f 100%);
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .bl-avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217,119,6,0.28), transparent 68%);
+      filter: blur(8px);
+    }
+    .bl-avatar-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--bg);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .bl-avatar-inner img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+    }
+
+    /* Name & sub */
+    .bl-name {
+      font-family: 'Cairo', sans-serif;
+      font-size: 22px; font-weight: 700;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 3px;
+    }
+    .bl-sub {
+      font-family: -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--coffee);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    .bl-tagline {
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    /* Links */
+    .bl-links {
+      width: 100%;
+      display: flex; flex-direction: column; gap: 10px;
+      direction: rtl;
+    }
+    .bl-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 99px;
+      border: 1px solid rgba(217,119,6,0.2);
+      background: rgba(24,15,10,0.9);
+      gap: 10px;
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: none;
+    }
+    .bl-link.visible {
+      animation: blLinkIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes blLinkIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .bl-link-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(217,119,6,0.1);
+      border: 1px solid rgba(217,119,6,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--coffee); flex-shrink: 0;
+    }
+    .bl-link-label {
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.88);
+      flex: 1;
+    }
+    .bl-link-arrow {
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* Cobalt watermark */
+    .bl-watermark {
+      margin-top: 28px;
+      font-family: -apple-system, sans-serif;
+      font-size: 10px;
+      color: rgba(255,255,255,0.18);
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+    .bl-watermark span { color: rgba(56,151,240,0.55); }
+  </style>
+</head>
+<body>
+<div class="scale-container" id="scaleContainer">
+<div class="scene">
+
+  <!-- Transition flash overlay -->
+  <div class="flash" id="flash"></div>
+
+  <!-- Finger cursor -->
+  <div class="finger" id="finger"></div>
+
+  <!-- ─── PHASE 1: Instagram ─── -->
+  <div class="ig-screen" id="igScreen">
+    <!-- Status bar -->
+    <div class="ig-statusbar">
+      <span>9:41</span>
+      <div class="ig-statusbar-icons">
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="white"><rect x="0" y="4" width="3" height="7" rx="0.5"/><rect x="4" y="2.5" width="3" height="8.5" rx="0.5"/><rect x="8" y="1" width="3" height="10" rx="0.5"/><rect x="12" y="0" width="3" height="11" rx="0.5"/></svg>
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="white" stroke-width="1.5"><path d="M1 8.5 C2.5 5 5.5 3 7 3 S11.5 5 13 8.5"/><path d="M3.5 8.5 C4.5 6.5 6 5.5 7 5.5 S9.5 6.5 10.5 8.5"/><circle cx="7" cy="8.5" r="1" fill="white" stroke="none"/></svg>
+        <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="18" height="10" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="2" y="2" width="13" height="7" rx="1" fill="white"/><path d="M20 3.5v4c.8-.4 1.3-1.1 1.3-2S20.8 3.9 20 3.5z" fill="white" fill-opacity="0.4"/></svg>
+      </div>
+    </div>
+
+    <!-- IG top bar -->
+    <div class="ig-topbar">
+      <svg width="100" height="29" viewBox="0 0 100 29" fill="white" aria-label="Instagram">
+        <text x="0" y="22" font-family="-apple-system,Billabong,sans-serif" font-size="24" letter-spacing="-0.5">Instagram</text>
+      </svg>
+      <div class="ig-topbar-icons">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+      </div>
+    </div>
+
+    <!-- Profile header -->
+    <div class="ig-profile-header">
+      <div class="ig-avatar-ring">
+        <div class="ig-avatar-inner">
+          <img src="/demos/assets/jaber_logo.webp" alt="Jaber Coffee" onerror="this.style.display='none';this.parentElement.style.background='#2a1a0a'">
+        </div>
+      </div>
+      <div class="ig-stats">
+        <div class="ig-stat"><span class="ig-stat-num">84</span><span class="ig-stat-label">posts</span></div>
+        <div class="ig-stat"><span class="ig-stat-num">2.1k</span><span class="ig-stat-label">followers</span></div>
+        <div class="ig-stat"><span class="ig-stat-num">318</span><span class="ig-stat-label">following</span></div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div class="ig-bio">
+      <div class="ig-bio-name">☕ محمصة ومقهى جابر</div>
+      <div class="ig-bio-text">أجود أنواع القهوة المختصة<br>كركوك، العراق 🇮🇶</div>
+      <!-- The clickable bio link -->
+      <a class="ig-bio-link" id="bioLinkBtn" href="#" onclick="return false">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        cobalt.link/jaber-coffee
+      </a>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="ig-actions">
+      <button class="ig-btn ig-btn--follow">Follow</button>
+      <button class="ig-btn ig-btn--msg">Message</button>
+      <button class="ig-btn ig-btn--more">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+
+    <!-- Highlights -->
+    <div class="ig-highlights">
+      <div class="ig-highlight">
+        <div class="ig-highlight-ring"><div class="ig-highlight-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></div></div>
+        <span>القهوة</span>
+      </div>
+      <div class="ig-highlight">
+        <div class="ig-highlight-ring"><div class="ig-highlight-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div></div>
+        <span>فعاليات</span>
+      </div>
+      <div class="ig-highlight">
+        <div class="ig-highlight-ring"><div class="ig-highlight-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div></div>
+        <span>وين احنا</span>
+      </div>
+      <div class="ig-highlight">
+        <div class="ig-highlight-ring"><div class="ig-highlight-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>
+        <span>الفريق</span>
+      </div>
+    </div>
+
+    <!-- Posts grid (ghost tiles) -->
+    <div class="ig-posts">
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+      <div class="ig-post"><div class="ig-post-shimmer"></div></div>
+    </div>
+  </div>
+
+  <!-- ─── PHASE 2: Bio Link page (real mockup via iframe) ─── -->
+  <div class="biolink-screen" id="biolinkScreen">
+    <iframe
+      src="/demos/bio-links/jaber_coffee_house_bio_link.html?embed=true"
+      class="biolink-iframe"
+      title="صفحة Bio Link — محمصة ومقهى جابر"
+      scrolling="no"
+    ></iframe>
+  </div>
+</div>
+</div>
+
+<script>
+  function adjustScale() {
+    const container = document.getElementById('scaleContainer');
+    if (!container) return;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const targetWidth = 360;
+    const scale = width / targetWidth;
+    container.style.transform = `scale(${scale})`;
+    container.style.width = `${targetWidth}px`;
+    container.style.height = `${height / scale}px`;
+  }
+  window.addEventListener('resize', adjustScale);
+  window.addEventListener('DOMContentLoaded', adjustScale);
+  adjustScale();
+
+(function() {
+  const finger         = document.getElementById('finger');
+  const bioLinkBtn     = document.getElementById('bioLinkBtn');
+  const igScreen       = document.getElementById('igScreen');
+  const biolinkScreen  = document.getElementById('biolinkScreen');
+  const flash          = document.getElementById('flash');
+
+  /* ── Timing constants (ms) ── */
+  const T_PAUSE_BEFORE_MOVE = 1800;
+  const T_FINGER_TRAVEL     = 700;
+  const T_PRESS_HOLD        = 400;
+  const T_FLASH             = 120;
+  const T_BIOLINK_SHOW      = 350;
+  const T_BIOLINK_DWELL     = 3200;
+  const T_RETURN_FADE       = 500;
+  const T_IG_RESET_DWELL    = 300;
+
+  /* ── Inline-style helpers ── */
+  function setInstant(el, props) {
+    el.style.transition = 'none';
+    Object.assign(el.style, props);
+    el.getBoundingClientRect();
+  }
+
+  function animateTo(el, transition, props) {
+    el.style.transition = transition;
+    el.getBoundingClientRect();
+    Object.assign(el.style, props);
+  }
+
+  function resetAll() {
+    setInstant(igScreen,       { opacity: '1', transform: 'translateY(0)',    pointerEvents: 'auto' });
+    setInstant(biolinkScreen,  { opacity: '0', transform: 'translateY(32px)', pointerEvents: 'none' });
+    setInstant(finger,         { opacity: '0', transform: 'scale(0.6)' });
+  }
+
+  function getBtnPos() {
+    let el = bioLinkBtn;
+    let x = 0;
+    let y = 0;
+    const scene = document.querySelector('.scene');
+    while (el && el !== scene) {
+      x += el.offsetLeft;
+      y += el.offsetTop;
+      el = el.offsetParent;
+    }
+    return {
+      x: x + bioLinkBtn.offsetWidth / 2,
+      y: y + bioLinkBtn.offsetHeight / 2,
+    };
+  }
+
+  function runCycle() {
+    resetAll();
+
+    /* Step 1: Dwell on Instagram */
+    setTimeout(() => {
+      const pos = getBtnPos();
+
+      /* Step 2: Finger fades in offset */
+      setInstant(finger, { left: (pos.x + 55) + 'px', top: (pos.y - 38) + 'px', opacity: '0', transform: 'scale(0.6)' });
+      animateTo(finger, 'opacity 0.3s ease, transform 0.3s ease', { opacity: '1', transform: 'scale(1)' });
+
+      setTimeout(() => {
+        /* Step 3: Finger travels to link */
+        animateTo(finger,
+          'left 0.65s cubic-bezier(0.25,1,0.5,1), top 0.65s cubic-bezier(0.25,1,0.5,1)',
+          { left: (pos.x - 13) + 'px', top: (pos.y - 13) + 'px' }
+        );
+
+        setTimeout(() => {
+          /* Step 4: Press */
+          animateTo(finger, 'transform 0.15s ease', { transform: 'scale(0.72)' });
+          bioLinkBtn.classList.add('tapping');
+
+          setTimeout(() => {
+            /* Step 5: Flash + hide finger */
+            flash.style.transition = 'opacity 0.08s ease';
+            flash.style.opacity = '0.22';
+            animateTo(finger, 'opacity 0.15s ease', { opacity: '0' });
+            bioLinkBtn.classList.remove('tapping');
+
+            setTimeout(() => {
+              flash.style.opacity = '0';
+
+              /* Step 6: Instagram exits */
+              animateTo(igScreen, 'opacity 0.45s ease, transform 0.45s ease', {
+                opacity: '0', transform: 'translateY(-24px)', pointerEvents: 'none'
+              });
+
+              setTimeout(() => {
+                /* Step 7: Bio Link page slides in */
+                animateTo(biolinkScreen,
+                  'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)',
+                  { opacity: '1', transform: 'translateY(0)', pointerEvents: 'auto' }
+                );
+
+                /* Step 8: Dwell, then fade out and loop */
+                setTimeout(() => {
+                  animateTo(biolinkScreen, 'opacity 0.4s ease, transform 0.4s ease', {
+                    opacity: '0', transform: 'translateY(-18px)', pointerEvents: 'none'
+                  });
+                  setTimeout(() => setTimeout(runCycle, T_IG_RESET_DWELL), T_RETURN_FADE);
+                }, T_BIOLINK_DWELL);
+
+              }, T_BIOLINK_SHOW);
+            }, T_FLASH + 80);
+          }, T_PRESS_HOLD);
+        }, T_FINGER_TRAVEL);
+      }, 80);
+    }, T_PAUSE_BEFORE_MOVE);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => setTimeout(runCycle, 500));
+})()
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+import { useState, useEffect } from 'react'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Services from './components/Services'
+import Process from './components/Process'
+import Pricing from './components/Pricing'
+import DemoPreview from './components/DemoPreview'
+import TeamCards from './components/TeamCards'
+import VisitCta from './components/VisitCta'
+import Footer from './components/Footer'
+import IntroOverlay from './components/IntroOverlay'
+import FloatingBot from './components/FloatingBot'
+
+function App() {
+  const [introActive, setIntroActive] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIntroActive(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className={introActive ? 'intro-active' : 'intro-done'}>
+      {introActive && <IntroOverlay />}
+      <Navbar />
+      <main>
+        <Hero introActive={introActive} />
+        <Services />
+        <Process />
+        <Pricing />
+        <DemoPreview />
+        <TeamCards />
+        <VisitCta />
+      </main>
+      <Footer />
+      <FloatingBot paused={introActive} />
+    </div>
+  )
+}
+
+export default App

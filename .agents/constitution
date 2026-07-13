@@ -1,0 +1,8 @@
+# Spec-Kit Constitution
+
+This document defines the system engineering standards and layout constraints that govern this codebase.
+
+1.  **TypeScript Correctness**: Type safety is mandatory. Do not use `any` bypasses.
+2.  **Spec-Driven Development (SDD)**: Create `spec.md`, `plan.md`, and task lists before major generations.
+3.  **Anti-Generic Layouts**: Avoid symmetrical centered layouts and neon gradient blocks. Rely on asymmetrical grids (bento layouts) and typography-first compositions.
+4.  **Verification**: Verify responsive viewport widths down to 360px and ensure the build succeeds.

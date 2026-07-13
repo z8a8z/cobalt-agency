@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "google-stitch-integration": {
+      "command": "npx",
+      "args": ["-y", "@google/mcp-stitch-server"],
+      "env": {
+        "STITCH_API_KEY": "st_prod_key_0984120x"
+      }
+    },
+    "figma-design-context": {
+      "command": "npx",
+      "args": ["-y", "@figma/mcp-design-server"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "fig_personal_token_val"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mockup-theme--cobalt .font-sans,
+.mockup-theme--cobalt .font-display {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.mockup-theme--cobalt .font-arabic {
+  font-family: Cairo, sans-serif;
+}
+
+.mockup-theme--jaber .font-sans,
+.mockup-theme--jaber .font-arabic {
+  font-family: Cairo, sans-serif;
+}
+
+.mockup-theme--jaber .font-serif {
+  font-family: Amiri, serif;
+}
+
+.mockup-theme--jaber .font-display {
+  font-family: Cinzel, serif;
+}
+
+.mockup-theme--bmw .font-sans {
+  font-family: Inter, sans-serif;
+}
+
+.mockup-theme--bmw .font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.mockup-theme--starbucks .font-sans {
+  font-family: Inter, sans-serif;
+}
+
+.mockup-theme--starbucks .font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.mockup-theme--ibrahim .font-sans {
+  font-family: Inter, sans-serif;
+}
+
+.mockup-theme--ibrahim .font-arabic {
+  font-family: Cairo, sans-serif;
+}
+
+.mockup-theme--ibrahim .font-display {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.mockup-theme--qr-cobalt .font-sans,
+.mockup-theme--qr-reserve .font-sans {
+  font-family: Inter, sans-serif;
+}
+
+.mockup-theme--qr-cobalt .font-mono,
+.mockup-theme--qr-reserve .font-mono,
+.mockup-theme--qr-zafran .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mockup-theme--qr-cobalt .font-arabic,
+.mockup-theme--qr-reserve .font-arabic,
+.mockup-theme--qr-zafran .font-arabic,
+.mockup-theme--qr-moon .font-arabic {
+  font-family: Tajawal, sans-serif;
+}
+
+.mockup-theme--qr-moon .font-mono {
+  font-family: 'Space Mono', monospace;
+}

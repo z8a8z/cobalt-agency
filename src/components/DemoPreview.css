@@ -1,0 +1,183 @@
+/* ═══════════════════════════════════════════════════════
+   DemoPreview — Live demo showcase section
+   ═══════════════════════════════════════════════════════ */
+
+.demo-preview {
+  text-align: center;
+  overflow: hidden;
+}
+
+.demo-preview__subtitle {
+  margin-block-start: var(--space-3);
+  margin-block-end: var(--space-6);
+}
+
+/* ── Tabs Selector ── */
+.demo-preview__tabs {
+  display: inline-flex;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  margin-block-end: var(--space-8);
+  gap: 4px;
+}
+
+.demo-preview__tab {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-ar);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth);
+}
+
+.demo-preview__tab:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.demo-preview__tab--active {
+  background: var(--primary);
+  color: var(--text-primary);
+}
+
+/* ── Track Wrapper (Bleeds to the viewport edges) ── */
+.demo-preview__track-wrapper,
+.demo-preview__qr-track-wrapper {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding-block: var(--space-4);
+}
+
+/* ── Horizontal Scrolling Track (shared for both Bio & QR) ── */
+.demo-preview__track,
+.demo-preview__qr-track {
+  display: flex;
+  gap: var(--space-8);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  scroll-behavior: smooth;
+  /* Centering formula: 50vw center line - half of phone width (180px) */
+  padding-inline: calc(50vw - 180px); 
+  padding-block: var(--space-8) var(--space-10);
+  -ms-overflow-style: none; /* hide scrollbars */
+  scrollbar-width: none;
+}
+
+.demo-preview__track::-webkit-scrollbar,
+.demo-preview__qr-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Individual Phone frames inside the track ── */
+.demo-preview__phone-wrapper {
+  width: 360px;
+  height: 740px;
+  flex-shrink: 0;
+  display: block;
+  position: relative;
+  transform-origin: center center;
+  transform: scale(0.85); /* shrunk by default */
+  opacity: 0.4; /* faded by default */
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              opacity var(--duration-normal) var(--ease-smooth);
+  cursor: pointer;
+  scroll-snap-align: center;
+}
+
+.demo-preview__phone-wrapper:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: var(--space-2);
+}
+
+/* Focused centered phone zooms in and becomes fully opaque */
+.demo-preview__phone-wrapper--focused {
+  transform: scale(1.03);
+  opacity: 1;
+  z-index: 10;
+}
+
+.demo-preview__iframe-phone {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+  display: block;
+  border-radius: var(--radius-xl);
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}
+
+/* Hover lift on focused phone — applied on wrapper to prevent flicker loop */
+.demo-preview__phone-wrapper--focused:hover .demo-preview__iframe-phone {
+  transform: translateY(-8px);
+}
+
+/* ── Ambient Glow ── */
+.demo-preview__glow {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.demo-preview__glow::before {
+  content: '';
+  width: clamp(280px, 50vw, 500px);
+  height: clamp(280px, 50vw, 500px);
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+  filter: blur(100px);
+}
+
+/* ── Responsive adjustments ── */
+
+/* Tablet (~768px) — wrapper scaled to 0.85, center pad adjusted */
+@media (max-width: 768px) {
+  .demo-preview__phone-wrapper {
+    transform: scale(0.72);
+  }
+  
+  .demo-preview__phone-wrapper--focused {
+    transform: scale(0.88);
+  }
+  
+  .demo-preview__track,
+  .demo-preview__qr-track {
+    /* Tablet: wrapper scaled to ~0.85x → 360 * 0.85 / 2 ≈ 153px */
+    padding-inline: calc(50vw - 153px);
+    gap: var(--space-4);
+  }
+}
+
+/* Mobile (~480px) — wrapper scaled to 0.75, center pad adjusted */
+@media (max-width: 480px) {
+  .demo-preview__phone-wrapper {
+    transform: scale(0.6);
+  }
+  
+  .demo-preview__phone-wrapper--focused {
+    transform: scale(0.75);
+  }
+  
+  .demo-preview__track,
+  .demo-preview__qr-track {
+    /* Mobile: wrapper scaled to ~0.75x → 360 * 0.75 / 2 = 135px */
+    padding-inline: calc(50vw - 135px);
+    gap: var(--space-2);
+  }
+}

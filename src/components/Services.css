@@ -1,0 +1,278 @@
+/* ═══════════════════════════════════════════════════════
+   Services Section — Bento Grid Layout
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Section Header ── */
+.services-header {
+  text-align: center;
+  margin-block-end: var(--space-8);
+}
+
+.services-header h2 {
+  margin-block-start: var(--space-3);
+}
+
+/* ── Bento Grid ── */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Service Card ── */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow: hidden;
+  position: relative;
+  direction: rtl;
+  text-align: right;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.service-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  width: 100%;
+}
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-2);
+  width: 100%;
+}
+
+.service-card-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.service-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.service-card h3 {
+  margin-block-start: var(--space-1);
+}
+
+.service-card p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ── Spotlight Border & Glow Effects ── */
+.spotlight-card {
+  position: relative;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(
+    350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    hsla(var(--primary-hsl), 0.3) 0%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: var(--spotlight-opacity, 0);
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    hsla(var(--primary-hsl), 0.04) 0%,
+    transparent 80%
+  );
+  pointer-events: none;
+  opacity: var(--spotlight-opacity, 0);
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+/* ── Mockup Images ── */
+.service-card-mockup {
+  margin-block-start: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  transform-style: preserve-3d;
+  will-change: transform;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Bio Link card: display vertical smartphone */
+.service-card-mockup--biolink {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block-start: var(--space-4);
+  margin-inline: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
+  margin-block-end: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
+  width: calc(100% + 2 * clamp(1.5rem, 3vw, 2.5rem));
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  min-height: 380px;
+  position: relative;
+  background: #040815; /* Symmetrical background with Card 2 */
+  border-top: 1px solid var(--border);
+}
+
+/* Ambient glow & grid lines to match Card 2's canvas */
+.biolink-mockup-ambient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, hsla(var(--primary-hsl), 0.15), transparent 70%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.biolink-mockup-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.biolink-phone {
+  position: relative;
+  width: clamp(140px, 42%, 190px);
+  aspect-ratio: 0.515;
+  margin: 0 auto;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.biolink-phone-body {
+  position: absolute;
+  inset: 0;
+  padding: 5.3%;
+  border-radius: 32px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.15), transparent 18%),
+    linear-gradient(150deg, #1b202e, #070912 60%, #111622);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.1),
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    0 0 24px hsla(var(--primary-hue), var(--primary-saturation), var(--primary-lightness), 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.biolink-phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #050505;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+  display: flex;
+  flex-direction: column;
+}
+
+.biolink-phone-speaker {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 2.9%;
+  width: 29%;
+  height: 2.3%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #020308;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.biolink-phone-button {
+  position: absolute;
+  right: -1.8%;
+  top: 24%;
+  width: 2.1%;
+  height: 12%;
+  border-radius: 0 3px 3px 0;
+  background: #252b39;
+}
+
+.biolink-loop-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: transparent;
+}
+
+/* QR card: bleed to card edges on all sides except top */
+.service-card-mockup--qr {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--space-4);
+  margin-inline: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
+  margin-block-end: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
+  width: calc(100% + 2 * clamp(1.5rem, 3vw, 2.5rem));
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  min-height: 0;
+}
+
+/* The actual web component host — full bleed, transparent background */
+.qr-embed-host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+}
+
+/* Override the web component's own background so it blends with the card */
+.qr-embed-host qr-menu-loop,
+.service-card-mockup--qr qr-menu-loop {
+  --qml-bg: transparent;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}

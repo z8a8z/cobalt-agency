@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbucks Reserve - Tasting Matrix</title>
+    <link rel="stylesheet" href="/demos/mockups.css">
+    <script src="/demos/mockup-autoscroll.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
+    
+
+    <style>
+        body {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+        /* Micro-noise texture for the dark industrial UI */
+        .industrial-noise {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 50;
+            mix-blend-mode: overlay;
+        }
+
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Architectural structural lines */
+        .matrix-border-b {
+            border-bottom: 1px solid rgba(198, 156, 109, 0.15);
+        }
+        .matrix-border-l {
+            border-left: 1px solid rgba(198, 156, 109, 0.15);
+        }
+    </style>
+</head>
+<body class="mockup-theme--qr-reserve min-h-screen flex items-center justify-center p-0 text-white font-sans overflow-hidden">
+
+    <!-- The Phone Mockup Frame -->
+    <div class="relative w-[340px] h-[720px] bg-reserve-bg rounded-[3rem] border-[10px] border-[#050505] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7),inset_0_0_0_1px_rgba(198,156,109,0.1),0_0_0_1px_rgba(0,0,0,1)] flex-shrink-0 overflow-hidden ring-1 ring-black/50">
+        
+        <!-- Physical Hardware: Dynamic Island -->
+        <div class="absolute top-0 inset-x-0 h-7 flex justify-center z-50">
+            <div class="w-28 h-6 bg-black rounded-b-3xl relative top-[-2px]"></div>
+        </div>
+
+        <div class="industrial-noise"></div>
+
+        <div class="relative w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar flex flex-col pt-14">
+            
+            <!-- Exact Reserve Layout Header -->
+            <header class="px-6 pb-6 matrix-border-b relative z-10 flex flex-col items-center justify-center pt-4">
+                
+                <!-- Starbucks Logo -->
+                <div class="mb-4 w-12 h-12 rounded-full overflow-hidden border border-reserve-copper/30">
+                    <img class="w-full h-full object-cover" src="/demos/assets/starbucks_logo.webp" alt="Starbucks Logo">
+                </div>
+
+                <h1 class="text-xs font-mono tracking-[0.3em] text-reserve-text mb-1 uppercase" dir="ltr">Starbucks Reserve</h1>
+                <div class="font-arabic text-[11px] text-reserve-muted tracking-widest mt-1">
+                    مصفوفة التذوق // بغداد
+                </div>
+            </header>
+
+            <main class="relative z-10 flex-1 px-4 py-6">
+                
+                <!-- Frame Container for the Matrix -->
+                <div class="border border-reserve-copper/20 p-1">
+                    <div class="border border-reserve-copper/10">
+
+                        <!-- Category Header -->
+                        <div class="flex items-stretch matrix-border-b bg-reserve-surface/50">
+                            <div class="py-2 px-3 font-mono text-[9px] text-reserve-copper tracking-widest uppercase writing-vertical flex items-center justify-center matrix-border-l shrink-0 w-8" dir="ltr">
+                                01
+                            </div>
+                            <div class="py-2 px-4 flex-1 flex flex-col justify-center">
+                                <span class="font-arabic text-xs text-reserve-text tracking-wide">التقطير اليدوي</span>
+                                <span class="font-sans text-[9px] text-reserve-muted tracking-widest uppercase mt-0.5" dir="ltr">Pour-Over Craft</span>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item 1 -->
+                        <div class="matrix-border-b group hover:bg-reserve-surface/30 transition-colors">
+                            <div class="flex justify-between items-start p-4">
+                                <div>
+                                    <h2 class="text-base font-medium text-reserve-text font-arabic mb-0.5">سومطرة بحيرة توبا</h2>
+                                    <div class="font-sans text-[10px] text-reserve-muted tracking-widest uppercase mb-3" dir="ltr">Sumatra Lake Toba</div>
+                                    
+                                    <!-- "Invented" UI Element: Intensity Matrix instead of text -->
+                                    <div class="flex items-center gap-2" dir="ltr">
+                                        <span class="font-mono text-[8px] text-reserve-copper uppercase tracking-wider">Roast</span>
+                                        <div class="flex gap-0.5">
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-left flex flex-col items-end">
+                                    <div class="font-mono text-sm text-reserve-text">١١,٠٠٠</div>
+                                    <div class="font-arabic text-[9px] text-reserve-muted mt-0.5">د.ع</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item 2 -->
+                        <div class="matrix-border-b group hover:bg-reserve-surface/30 transition-colors">
+                            <div class="flex justify-between items-start p-4">
+                                <div>
+                                    <h2 class="text-base font-medium text-reserve-text font-arabic mb-0.5">رواندا هينجاكاوا</h2>
+                                    <div class="font-sans text-[10px] text-reserve-muted tracking-widest uppercase mb-3" dir="ltr">Rwanda Hingakawa</div>
+                                    
+                                    <div class="flex items-center gap-2" dir="ltr">
+                                        <span class="font-mono text-[8px] text-reserve-copper uppercase tracking-wider">Roast</span>
+                                        <div class="flex gap-0.5">
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-left flex flex-col items-end">
+                                    <div class="font-mono text-sm text-reserve-text">١٢,٥٠٠</div>
+                                    <div class="font-arabic text-[9px] text-reserve-muted mt-0.5">د.ع</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category Header 2 -->
+                        <div class="flex items-stretch matrix-border-b bg-reserve-surface/50 mt-4">
+                            <div class="py-2 px-3 font-mono text-[9px] text-reserve-copper tracking-widest uppercase flex items-center justify-center matrix-border-l shrink-0 w-8" dir="ltr">
+                                02
+                            </div>
+                            <div class="py-2 px-4 flex-1 flex flex-col justify-center">
+                                <span class="font-arabic text-xs text-reserve-text tracking-wide">التحضير البطيء والنيترو</span>
+                                <span class="font-sans text-[9px] text-reserve-muted tracking-widest uppercase mt-0.5" dir="ltr">Cold Brew & Nitro</span>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item 3 -->
+                        <div class="group hover:bg-reserve-surface/30 transition-colors">
+                            <div class="flex justify-between items-start p-4">
+                                <div>
+                                    <h2 class="text-base font-medium text-reserve-text font-arabic mb-0.5">كولد برو معتق ببرميل الويسكي</h2>
+                                    <div class="font-sans text-[10px] text-reserve-muted tracking-widest uppercase mb-3 leading-tight" dir="ltr">Whiskey Barrel-Aged<br>Cold Brew</div>
+                                    
+                                    <div class="flex items-center gap-2" dir="ltr">
+                                        <span class="font-mono text-[8px] text-reserve-copper uppercase tracking-wider">Roast</span>
+                                        <div class="flex gap-0.5">
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                            <div class="w-1.5 h-1.5 bg-reserve-copper/20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-left flex flex-col items-end">
+                                    <div class="font-mono text-sm text-reserve-text">١٤,٠٠٠</div>
+                                    <div class="font-arabic text-[9px] text-reserve-muted mt-0.5">د.ع</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <footer class="p-6 relative z-10 pt-4 pb-10">
+                <!-- Data / Coordinates block -->
+                <div class="font-mono text-[9px] text-reserve-muted tracking-widest flex justify-between border-t border-reserve-copper/20 pt-4" dir="ltr">
+                    <span>LAT. 33.3128 N</span>
+                    <span>LON. 44.3615 E</span>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const screen = document.querySelector('.relative.w-full.h-full.overflow-y-auto');
+            if (!screen) return;
+
+            // ── 1. Handle Embed Mode (Screen Only) ──
+            if (window.location.search.includes('embed=true')) {
+                const phone = screen.parentElement;
+                if (phone) {
+                    // Reset class to clear phone border, notch, and shadow styles
+                    phone.className = "relative w-full h-full overflow-hidden z-10";
+                }
+                const notch = document.querySelector('.absolute.top-0.inset-x-0.h-7');
+                if (notch) notch.style.display = 'none';
+                
+                const content = screen.querySelector('[class*="pt-20"]') || screen.querySelector('[class*="pt-14"]');
+                if (content) {
+                    content.className = content.className
+                        .replace(/\bpt-(?:14|16|20|24)\b/g, 'pt-8');
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>
