@@ -1,11 +1,12 @@
 /* ═══════════════════════════════════════════════════════
-   Process — scroll-linked three-step system
+   Process — clear, static three-step system
    ═══════════════════════════════════════════════════════ */
 
 .process {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  overflow-anchor: none;
   background:
     linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 50%, var(--bg) 100%);
 }
@@ -14,7 +15,7 @@
   position: absolute;
   z-index: -2;
   inset: 8% auto auto 50%;
-  width: min(70rem, 110vw);
+  width: min(70rem, 100vw);
   aspect-ratio: 2 / 1;
   border-radius: 50%;
   pointer-events: none;
@@ -37,7 +38,8 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 22%, black 78%, transparent);
 }
 
-.process__container {
+.process__container,
+.process-steps-wrap {
   position: relative;
 }
 
@@ -53,10 +55,6 @@
   text-wrap: balance;
 }
 
-.process-steps-wrap {
-  position: relative;
-}
-
 .process-steps {
   position: relative;
   display: grid;
@@ -66,7 +64,6 @@
   padding: 0;
   list-style: none;
   direction: rtl;
-  perspective: 1400px;
 }
 
 .process-steps__track {
@@ -75,7 +72,6 @@
   inset-block-start: 55px;
   inset-inline: calc(16.6667% + 1.3rem);
   height: 2px;
-  overflow: visible;
   border-radius: 999px;
   background: hsla(var(--primary-hsl), 0.1);
   pointer-events: none;
@@ -93,20 +89,13 @@
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(90deg, hsl(var(--primary-hue), 100%, 62%), var(--primary));
-  box-shadow: 0 0 15px hsla(var(--primary-hsl), 0.55);
-  transform-origin: right center;
-  will-change: transform;
+  box-shadow: 0 0 15px hsla(var(--primary-hsl), 0.42);
 }
 
 .process-step {
   position: relative;
   z-index: 1;
   min-width: 0;
-  --process-pointer-x: 50%;
-  --process-pointer-y: 50%;
-  --process-rotate-x: 0deg;
-  --process-rotate-y: 0deg;
-  transform-style: preserve-3d;
 }
 
 .process-step__surface {
@@ -114,64 +103,14 @@
   min-height: 285px;
   overflow: hidden;
   padding: 1.25rem;
-  border: 1px solid hsla(var(--primary-hsl), 0.1);
+  border: 1px solid hsla(var(--primary-hsl), 0.22);
   border-radius: clamp(1.25rem, 2.5vw, 1.75rem);
-  background:
-    linear-gradient(145deg, hsla(var(--text-primary-hsl), 0.045), transparent 43%),
-    hsla(var(--card-hsl), 0.82);
-  box-shadow:
-    0 1px 0 hsla(var(--text-primary-hsl), 0.04) inset,
-    0 24px 70px hsla(var(--primary-hue), 18%, 2%, 0.27);
-  transform: rotateX(var(--process-rotate-x)) rotateY(var(--process-rotate-y));
-  transform-origin: center;
-  transition:
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 350ms var(--ease-smooth),
-    background 400ms var(--ease-smooth),
-    box-shadow 500ms var(--ease-smooth);
-  will-change: transform;
-}
-
-.process-step__surface::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    400px circle at var(--process-pointer-x) var(--process-pointer-y),
-    rgba(255, 255, 255, 0.045),
-    transparent 50%
-  );
-  z-index: 5;
-}
-
-.process-step__surface::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(circle at 78% 10%, hsla(var(--primary-hsl), 0.15), transparent 43%);
-  transition: opacity 400ms var(--ease-smooth);
-}
-
-.process-step:hover .process-step__surface,
-.process-step--active .process-step__surface {
-  border-color: hsla(var(--primary-hsl), 0.3);
   background:
     linear-gradient(145deg, hsla(var(--text-primary-hsl), 0.055), transparent 48%),
     hsla(var(--card-hover-hsl), 0.86);
   box-shadow:
     0 1px 0 hsla(var(--text-primary-hsl), 0.06) inset,
-    0 30px 80px hsla(var(--primary-hue), 23%, 2%, 0.42),
-    0 0 0 1px hsla(var(--primary-hsl), 0.035);
-  transform: rotateX(var(--process-rotate-x)) rotateY(var(--process-rotate-y));
-}
-
-.process-step:hover .process-step__surface::before,
-.process-step--active .process-step__surface::before {
-  opacity: 1;
+    0 24px 70px hsla(var(--primary-hue), 18%, 2%, 0.3);
 }
 
 .process-step__top {
@@ -184,40 +123,18 @@
 }
 
 .process-step-circle {
-  position: relative;
   display: grid;
   width: 62px;
   height: 62px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid hsla(var(--primary-hsl), 0.32);
+  border: 1px solid var(--primary);
   border-radius: 50%;
-  color: var(--text-primary);
-  background:
-    radial-gradient(circle at 35% 28%, hsla(var(--text-primary-hsl), 0.14), transparent 34%),
-    hsla(var(--primary-hsl), 0.1);
+  color: white;
+  background: var(--primary);
   box-shadow:
-    0 0 0 7px hsla(var(--primary-hsl), 0.035),
-    0 18px 38px hsla(var(--primary-hsl), 0.12);
-  transition:
-    color 350ms var(--ease-smooth),
-    background 350ms var(--ease-smooth),
-    border-color 350ms var(--ease-smooth),
-    box-shadow 350ms var(--ease-smooth),
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.process-step-circle::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border: 1px dashed hsla(var(--primary-hsl), 0.13);
-  border-radius: 50%;
-  opacity: 0;
-  transform: rotate(-30deg) scale(0.8);
-  transition:
-    opacity 350ms var(--ease-smooth),
-    transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+    0 0 0 7px hsla(var(--primary-hsl), 0.07),
+    0 16px 42px hsla(var(--primary-hsl), 0.3);
 }
 
 .process-step-circle span {
@@ -226,37 +143,17 @@
   font-weight: 750;
 }
 
-.process-step:hover .process-step-circle,
-.process-step--active .process-step-circle {
-  border-color: var(--primary);
-  color: white;
-  background: var(--primary);
-  box-shadow:
-    0 0 0 7px hsla(var(--primary-hsl), 0.07),
-    0 16px 42px hsla(var(--primary-hsl), 0.3),
-    0 0 25px hsla(var(--primary-hsl), 0.25);
-  transform: scale(1.06);
-}
-
-.process-step:hover .process-step-circle::after,
-.process-step--active .process-step-circle::after {
-  opacity: 1;
-  transform: rotate(0) scale(1);
-}
-
 .process-step__icon {
+  position: relative;
+  z-index: 2;
   display: grid;
   width: 42px;
   height: 42px;
   place-items: center;
-  border: 1px solid hsla(var(--text-primary-hsl), 0.08);
+  border: 1px solid hsla(var(--primary-hsl), 0.22);
   border-radius: 13px;
-  color: var(--text-muted);
-  background: hsla(var(--text-primary-hsl), 0.025);
-  transition:
-    color 350ms var(--ease-smooth),
-    border-color 350ms var(--ease-smooth),
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--primary);
+  background: hsla(var(--primary-hsl), 0.08);
 }
 
 .process-step__icon svg {
@@ -269,294 +166,9 @@
   stroke-linejoin: round;
 }
 
-.process-step__icon {
-  position: relative;
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border: 1px solid hsla(var(--text-primary-hsl), 0.08);
-  border-radius: 13px;
-  color: var(--text-muted);
-  background: hsla(var(--text-primary-hsl), 0.025);
-  transition:
-    color 350ms var(--ease-smooth),
-    border-color 350ms var(--ease-smooth),
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: visible;
-  z-index: 10;
-}
-
-.process-step__icon.rocket-launched {
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 200ms ease, transform 300ms ease;
-  pointer-events: none;
-}
-
-.process-step:hover .process-step__icon {
-  color: var(--primary);
-  border-color: hsla(var(--primary-hsl), 0.22);
-}
-
-/* Base icon wrapper inside process-step__icon */
-.process-icon-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.process-icon-wrapper .base-icon {
-  width: 21px;
-  height: 21px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.45;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275), color 300ms ease;
-}
-
-/* ──────────────────────────────────────────────────────────
-   STEP 1: Message Scales Up, Green, shoots particles
-   ────────────────────────────────────────────────────────── */
-.animate-msg-scale .base-icon {
-  transform: scale(2.4);
-  color: #22c55e;
-  stroke-width: 1.1;
-  filter: drop-shadow(0 2px 8px rgba(34, 197, 94, 0.45));
-}
-
-.icon-particles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.particle-dot {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #22c55e;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #22c55e;
-  --angle: calc(var(--i) * (360deg / 12));
-  transform: rotate(var(--angle)) translateY(0);
-  opacity: 0;
-  animation: msg-particle-shoot 0.85s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-}
-
-@keyframes msg-particle-shoot {
-  0% {
-    transform: rotate(var(--angle)) translateY(0);
-    opacity: 1;
-  }
-  10% {
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(var(--angle)) translateY(65px);
-    opacity: 0;
-  }
-}
-
-/* ──────────────────────────────────────────────────────────
-   STEP 2: Web Build Layout constructs, Orange/gold sparks
-   ────────────────────────────────────────────────────────── */
 .process-icon-web .web-block {
   fill: currentColor;
-  opacity: 0.15;
-  transition: opacity 300ms ease, transform 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.animate-web-build .base-icon {
-  transform: scale(2.2);
-  color: #f97316;
-  filter: drop-shadow(0 2px 8px rgba(249, 115, 22, 0.45));
-}
-
-.animate-web-build .web-block {
-  opacity: 0.85;
-}
-
-.animate-web-build .web-block-left {
-  animation: web-slide-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
-}
-
-.animate-web-build .web-block-top-right {
-  animation: web-slide-right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15) 100ms forwards;
-}
-
-.animate-web-build .web-block-bot-right {
-  animation: web-slide-left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15) 200ms forwards;
-}
-
-@keyframes web-slide-up {
-  0% { transform: translateY(6px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 0.85; }
-}
-
-@keyframes web-slide-right {
-  0% { transform: translateX(6px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 0.85; }
-}
-
-@keyframes web-slide-left {
-  0% { transform: translateX(-6px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 0.85; }
-}
-
-.particle-spark {
-  position: absolute;
-  width: 3px;
-  height: 6px;
-  background: #f97316;
-  border-radius: 2px;
-  box-shadow: 0 0 6px #f97316;
-  --angle: calc(var(--i) * (360deg / 8));
-  transform: rotate(var(--angle)) translateY(0);
-  opacity: 0;
-  animation: spark-shoot 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-}
-
-@keyframes spark-shoot {
-  0% {
-    transform: rotate(var(--angle)) translateY(0) scaleY(1);
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(var(--angle)) translateY(55px) scaleY(0.4);
-    opacity: 0;
-  }
-}
-
-/* ──────────────────────────────────────────────────────────
-   STEP 3: Rocket vibrates, emits smoke, takes off locally
-   ────────────────────────────────────────────────────────── */
-.process-icon-rocket .base-icon {
-  transform: rotate(0deg);
-  transform-origin: center;
-}
-
-.animate-rocket-launch .base-icon {
-  animation: local-rocket-launch 1.1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  filter: drop-shadow(0 2px 10px hsla(var(--primary-hsl), 0.65));
-}
-
-@keyframes local-rocket-launch {
-  0% {
-    transform: translateY(0) scale(1);
-    color: var(--text-muted);
-    opacity: 1;
-  }
-  15% {
-    /* Shaking pre-launch */
-    transform: translateY(1px) scale(1.05) translateX(-0.5px);
-    color: var(--primary);
-  }
-  25% {
-    transform: translateY(-1px) scale(1.05) translateX(0.5px);
-    color: var(--primary);
-  }
-  35% {
-    transform: translateY(0) scale(1.05);
-    color: var(--primary);
-  }
-  42% {
-    /* Lift off to peak */
-    transform: translateY(-28px) scale(2.2);
-    color: var(--primary);
-    opacity: 1;
-  }
-  48% {
-    /* Explode and disappear */
-    transform: translateY(-28px) scale(2.6);
-    opacity: 0;
-  }
-  85%, 100% {
-    /* Reset and fade back in at home */
-    transform: translateY(0) scale(1);
-    color: var(--text-muted);
-    opacity: 1;
-  }
-}
-
-.icon-smoke {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  overflow: visible;
-}
-
-.smoke-puff {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-  filter: blur(1.5px);
-  opacity: 0;
-  --angle: calc(-60deg - (var(--i) * 12deg));
-  transform: translate(0, 0) scale(0.6);
-  animation: local-smoke-drift 0.5s ease-out forwards;
-  animation-delay: calc(var(--i) * 30ms);
-}
-
-@keyframes local-smoke-drift {
-  0% {
-    transform: translate(0, 0) scale(0.6);
-    opacity: 0.8;
-  }
-  40% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(calc(sin(var(--angle)) * 20px), calc(cos(var(--angle)) * 20px)) scale(1.8);
-    opacity: 0;
-  }
-}
-
-.particle-rocket-spark {
-  position: absolute;
-  width: 3px;
-  height: 9px;
-  border-radius: 50%;
-  --angle: calc(var(--i) * (360deg / 16));
-  --hue: calc(var(--i) * 22.5); /* Full rainbow firework spectrum */
-  background: hsl(var(--hue), 100%, 75%);
-  box-shadow: 
-    0 0 8px hsl(var(--hue), 100%, 75%),
-    0 0 18px hsl(var(--hue), 100%, 60%);
-  /* Shift pivot to the launch peak (-28px), then rotate and scale */
-  transform: translateY(-28px) rotate(var(--angle)) translateY(0) scale(0);
-  opacity: 0;
-  animation: local-rocket-spark-explode 1.2s cubic-bezier(0.05, 0.85, 0.2, 1) forwards;
-}
-
-@keyframes local-rocket-spark-explode {
-  0%, 36% {
-    transform: translateY(-28px) rotate(var(--angle)) translateY(0) scale(0);
-    opacity: 0;
-  }
-  42% {
-    transform: translateY(-28px) rotate(var(--angle)) translateY(5px) scale(1.8);
-    opacity: 1;
-  }
-  /* Drifts outward and drops down slightly at the end (gravity drift) */
-  100% {
-    transform: translateY(-28px) rotate(var(--angle)) translateY(80px) translateY(15px) scale(0.1);
-    opacity: 0;
-  }
+  opacity: 0.66;
 }
 
 .process-step-content {
@@ -580,27 +192,11 @@
   line-height: 1.8;
 }
 
-.process-step__edge {
-  position: absolute;
-  inset-inline-start: 0;
-  inset-block: 22% 22%;
-  width: 2px;
-  border-radius: 999px;
-  background: linear-gradient(to bottom, transparent, var(--primary), transparent);
-  opacity: 0;
-  transform: scaleY(0.35);
-  transition:
-    opacity 350ms var(--ease-smooth),
-    transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.process-step:hover .process-step__edge,
-.process-step--active .process-step__edge {
-  opacity: 0.9;
-  transform: scaleY(1);
-}
-
 @media (max-width: 800px) {
+  .process {
+    overflow: visible;
+  }
+
   .process-header {
     margin-block-end: var(--space-8);
   }
@@ -610,12 +206,13 @@
     gap: 1rem;
     max-width: 620px;
     margin-inline: auto;
-    padding-inline-start: 5rem;
+    padding-inline-start: 2.25rem;
+    padding-inline-end: 0;
   }
 
   .process-steps__track {
     inset-block: 37px 37px;
-    inset-inline-start: 29px;
+    inset-inline-start: max(24px, calc((100% - 620px) / 2 + 24px));
     inset-inline-end: auto;
     width: 2px;
     height: auto;
@@ -627,10 +224,6 @@
     border-inline: 1px solid hsla(var(--primary-hsl), 0.025);
   }
 
-  .process-steps__track-fill {
-    transform-origin: top center;
-  }
-
   .process-step__surface {
     min-height: 0;
   }
@@ -638,9 +231,9 @@
   .process-step-circle {
     position: absolute;
     inset-block-start: 6px;
-    inset-inline-start: -5rem;
-    width: 58px;
-    height: 58px;
+    inset-inline-start: -2.25rem;
+    width: 48px;
+    height: 48px;
   }
 
   .process-step__top {
@@ -656,38 +249,8 @@
 }
 
 @media (max-width: 480px) {
-  .process-steps {
-    padding-inline-start: 4.25rem;
-  }
-
-  .process-steps__track {
-    inset-inline-start: 26px;
-  }
-
-  .process-step-circle {
-    inset-inline-start: -4.25rem;
-    width: 52px;
-    height: 52px;
-  }
-
   .process-step__surface {
     padding: 1.15rem;
     border-radius: 1.2rem;
-  }
-}
-
-@media (hover: none) {
-  .process-step:hover .process-step__surface {
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .process-step__surface,
-  .process-step-circle,
-  .process-step-circle::after,
-  .process-step__icon,
-  .process-step__edge {
-    transition-duration: 0.01ms;
   }
 }

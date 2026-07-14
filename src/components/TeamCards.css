@@ -86,12 +86,7 @@
 }
 
 .team-profile {
-  --team-pointer-x: 50%;
-  --team-pointer-y: 34%;
-  --team-rotate-x: 0deg;
-  --team-rotate-y: 0deg;
   min-width: 0;
-  transform-style: preserve-3d;
   height: 100%;
 }
 
@@ -108,27 +103,9 @@
   box-shadow:
     0 1px 0 hsla(var(--text-primary-hsl), 0.045) inset,
     0 24px 70px hsla(var(--primary-hue), 15%, 2%, 0.36);
-  transform: rotateX(var(--team-rotate-x)) rotateY(var(--team-rotate-y));
-  transform-origin: center;
   transition:
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
     border-color 350ms var(--ease-smooth),
     box-shadow 500ms var(--ease-smooth);
-  will-change: transform;
-}
-
-.team-profile__surface::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    800px circle at var(--team-pointer-x) var(--team-pointer-y),
-    rgba(255, 255, 255, 0.04),
-    transparent 40%
-  );
-  z-index: 5;
 }
 
 .team-profile:hover .team-profile__surface {
@@ -173,24 +150,6 @@
     linear-gradient(180deg, hsla(var(--bg-hsl), 0.08) 0%, transparent 36%),
     linear-gradient(0deg, hsl(var(--card-hsl)) 0%, hsla(var(--card-hsl), 0.15) 34%, transparent 58%),
     linear-gradient(90deg, hsla(var(--bg-hsl), 0.32), transparent 28%, transparent 70%, hsla(var(--bg-hsl), 0.18));
-}
-
-.team-profile__spotlight {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle 260px at var(--team-pointer-x) var(--team-pointer-y),
-    hsla(var(--primary-hsl), 0.24),
-    transparent 68%
-  );
-  mix-blend-mode: screen;
-  transition: opacity 350ms var(--ease-smooth);
-}
-
-.team-profile:hover .team-profile__spotlight {
-  opacity: 1;
 }
 
 .team-profile__number,
@@ -308,14 +267,10 @@
   border-radius: 50%;
   background: hsla(var(--primary-hsl), 0.07);
   color: var(--primary);
-  transition:
-    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 300ms var(--ease-smooth),
-    box-shadow 300ms var(--ease-smooth);
+  transition: background 300ms var(--ease-smooth), box-shadow 300ms var(--ease-smooth);
 }
 
 .team-profile:hover .team-profile__mark-wrap {
-  transform: rotate(90deg);
   background: hsla(var(--primary-hsl), 0.13);
   box-shadow: 0 0 28px hsla(var(--primary-hsl), 0.22);
 }
@@ -323,10 +278,7 @@
 .team-profile__mark {
   width: 19px;
   height: 19px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.35;
-  stroke-linecap: round;
+  object-fit: contain;
 }
 
 .team-profile__edge {
@@ -419,26 +371,11 @@
   }
 }
 
-@media (hover: none) {
-  .team-profile__surface {
-    transform: none;
-  }
-
-  .team-profile__spotlight {
-    display: none;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .team-profile__surface,
   .team-profile__image,
   .team-profile__mark-wrap,
   .team-profile__edge {
     transition: none;
-  }
-
-  .team-profile__surface,
-  .team-profile:hover .team-profile__surface {
-    transform: none;
   }
 }

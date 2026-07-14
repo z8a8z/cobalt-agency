@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { setDemoAutoScroll } from '../lib/demoAutoscroll';
+import { useEffect, useRef, useState } from 'react';
 import { useElementInView } from '../hooks/useElementInView';
 import './Hero.css';
 
@@ -20,17 +19,8 @@ function ArrowIcon() {
 function Hero({ introActive }: HeroProps) {
   const [isReady, setIsReady] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+  const isHeroInView = useElementInView(heroRef, { threshold: 0.05 });
   const primaryBtnRef = useRef<HTMLAnchorElement>(null);
-  const heroFrameRef = useRef<HTMLIFrameElement>(null);
-  const isHeroInView = useElementInView(heroRef, { rootMargin: '0px', threshold: 0.05 });
-
-  const syncHeroDemoAnimation = useCallback(() => {
-    setDemoAutoScroll(heroFrameRef.current, isHeroInView);
-  }, [isHeroInView]);
-
-  useEffect(() => {
-    syncHeroDemoAnimation();
-  }, [syncHeroDemoAnimation]);
 
   useEffect(() => {
     if (introActive) {
@@ -41,52 +31,6 @@ function Hero({ introActive }: HeroProps) {
     const timeoutId = window.setTimeout(() => setIsReady(true), 90);
     return () => window.clearTimeout(timeoutId);
   }, [introActive]);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!finePointer.matches || reducedMotion.matches) return;
-
-    let frameId = 0;
-
-    const updatePointer = (event: PointerEvent) => {
-      window.cancelAnimationFrame(frameId);
-      frameId = window.requestAnimationFrame(() => {
-        const rect = hero.getBoundingClientRect();
-        const x = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-        const y = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-
-        hero.style.setProperty('--hero-pointer-x', `${x * 100}%`);
-        hero.style.setProperty('--hero-pointer-y', `${y * 100}%`);
-        hero.style.setProperty('--hero-tilt-x', `${(0.5 - y) * 4.5}deg`);
-        hero.style.setProperty('--hero-tilt-y', `${(x - 0.5) * 5.5}deg`);
-        hero.style.setProperty('--hero-shift-x', `${(x - 0.5) * 12}px`);
-        hero.style.setProperty('--hero-shift-y', `${(y - 0.5) * 10}px`);
-      });
-    };
-
-    const resetPointer = () => {
-      window.cancelAnimationFrame(frameId);
-      hero.style.setProperty('--hero-pointer-x', '68%');
-      hero.style.setProperty('--hero-pointer-y', '38%');
-      hero.style.setProperty('--hero-tilt-x', '0deg');
-      hero.style.setProperty('--hero-tilt-y', '0deg');
-      hero.style.setProperty('--hero-shift-x', '0px');
-      hero.style.setProperty('--hero-shift-y', '0px');
-    };
-
-    hero.addEventListener('pointermove', updatePointer);
-    hero.addEventListener('pointerleave', resetPointer);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      hero.removeEventListener('pointermove', updatePointer);
-      hero.removeEventListener('pointerleave', resetPointer);
-    };
-  }, []);
 
   useEffect(() => {
     const button = primaryBtnRef.current;
@@ -133,10 +77,9 @@ function Hero({ introActive }: HeroProps) {
     <section
       id="hero"
       ref={heroRef}
-      className={`hero ${isReady ? 'hero--ready' : ''}`}
+      className={`hero ${isReady ? 'hero--ready' : ''} ${isHeroInView ? 'hero--in-view' : ''}`}
     >
       <div className="hero__grid-bg" aria-hidden="true" />
-      <div className="hero__pointer-light" aria-hidden="true" />
       <div className="hero__beam hero__beam--one" aria-hidden="true" />
       <div className="hero__beam hero__beam--two" aria-hidden="true" />
 
@@ -183,12 +126,10 @@ function Hero({ introActive }: HeroProps) {
             <div className="hero__phone-wrapper">
               <div className="hero__phone-shell">
                 <iframe
-                  ref={heroFrameRef}
                   src="/demos/bio-links/cobalt_agency_bio_link.html"
                   className="hero__phone-iframe"
                   title="معاينة صفحة Bio Link على الهاتف"
                   loading="eager"
-                  onLoad={syncHeroDemoAnimation}
                 />
               </div>
             </div>

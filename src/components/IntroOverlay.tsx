@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import cobaltLogo from '../cobalt-logo.svg';
 import './IntroOverlay.css';
 
 export default function IntroOverlay() {
@@ -37,31 +38,7 @@ export default function IntroOverlay() {
           <span className="intro-overlay__particle intro-overlay__particle--three" aria-hidden="true" />
 
           <div className="intro-overlay__logo-container">
-            <svg
-              className="intro-overlay__logo-svg"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                className="intro-overlay__logo-path"
-                d="M38 12.5C34.5 7 28.5 4 22 4C11.5 4 4 12.5 4 24C4 35.5 11.5 44 22 44C28.5 44 34.5 41 38 35.5"
-                stroke="currentColor"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-                fill="none"
-              />
-              <circle
-                className="intro-overlay__logo-circle"
-                cx="30"
-                cy="24"
-                r="7"
-                stroke="currentColor"
-                strokeWidth="3"
-                fill="none"
-              />
-            </svg>
+            <img className="intro-overlay__logo-image" src={cobaltLogo} alt="" />
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import VisitCta from './components/VisitCta'
 import Footer from './components/Footer'
 import IntroOverlay from './components/IntroOverlay'
 import FloatingBot from './components/FloatingBot'
+import PerformanceDashboard from './components/PerformanceDashboard'
 
 function App() {
   const [introActive, setIntroActive] = useState(true);
@@ -36,6 +37,7 @@ function App() {
       </main>
       <Footer />
       <FloatingBot paused={introActive} />
+      {import.meta.env.DEV && <PerformanceDashboard />}
     </div>
   )
 }

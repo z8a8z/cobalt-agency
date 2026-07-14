@@ -1,16 +1,5 @@
+import cobaltLogo from '../cobalt-logo.svg';
 import './Footer.css';
-
-function BrandMark() {
-  return (
-    <svg viewBox="0 0 712 712" role="img" aria-label="Cobalt Co logo">
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        d="M 489 201 A 205 205 0 1 0 489 511 L 464 487 A 170 170 0 1 1 464 227 Z M 459 252 A 106 106 0 1 0 459 464 A 106 106 0 1 0 459 252 Z M 459 288 A 70 70 0 1 1 459 428 A 70 70 0 1 1 459 288 Z"
-      />
-    </svg>
-  );
-}
 
 function ArrowIcon() {
   return (
@@ -31,7 +20,7 @@ export default function Footer() {
         <div className="footer__brand footer__panel">
           <div className="footer__logo">
             <span className="footer__logo-mark">
-              <BrandMark />
+              <img src={cobaltLogo} alt="" />
             </span>
             <span>Cobalt</span>
           </div>

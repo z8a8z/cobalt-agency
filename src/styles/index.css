@@ -89,6 +89,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -101,6 +102,15 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100svh;
+  scroll-snap-type: none;
+}
+
+main {
+  scroll-snap-type: none;
+}
+
+section[id] {
+  scroll-margin-block-start: 5rem;
 }
 
 /* ── Base Typography ── */

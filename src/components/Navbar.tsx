@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import cobaltLogo from '../cobalt-logo.svg';
 import './Navbar.css';
 
 interface NavLink {
@@ -100,31 +101,7 @@ function Navbar() {
       >
         {/* ── Brand (Right in RTL) ── */}
         <a href="#hero" className="navbar__brand" aria-label="كوبالت — الصفحة الرئيسية">
-          <svg
-            className="navbar__logo-svg"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            {/* Large open C */}
-            <path
-              d="M38 12.5C34.5 7 28.5 4 22 4C11.5 4 4 12.5 4 24C4 35.5 11.5 44 22 44C28.5 44 34.5 41 38 35.5"
-              stroke="currentColor"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {/* Small nested o circle */}
-            <circle
-              cx="30"
-              cy="24"
-              r="7"
-              stroke="currentColor"
-              strokeWidth="3"
-              fill="none"
-            />
-          </svg>
+          <img className="navbar__logo" src={cobaltLogo} alt="" />
           <span className="navbar__wordmark">كوبالت</span>
         </a>
 

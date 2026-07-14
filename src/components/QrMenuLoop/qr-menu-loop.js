@@ -203,8 +203,6 @@ class QrMenuLoop extends HTMLElement {
     this.resizeObserver = new ResizeObserver(() => this.setGeometry());
     this.resizeObserver.observe(this.root);
 
-    this.addEventListener('pointerenter', this.onPointerEnter);
-    this.addEventListener('pointerleave', this.onPointerLeave);
     document.addEventListener('visibilitychange', this.onVisibilityChange);
 
     this.styleReady.then(() => {
@@ -220,18 +218,8 @@ class QrMenuLoop extends HTMLElement {
   disconnectedCallback() {
     this.stop();
     this.resizeObserver?.disconnect();
-    this.removeEventListener('pointerenter', this.onPointerEnter);
-    this.removeEventListener('pointerleave', this.onPointerLeave);
     document.removeEventListener('visibilitychange', this.onVisibilityChange);
   }
-
-  onPointerEnter = () => {
-    if (this.hasAttribute('pause-on-hover')) this.stop();
-  };
-
-  onPointerLeave = () => {
-    if (this.hasAttribute('pause-on-hover')) this.start();
-  };
 
   onVisibilityChange = () => {
     if (document.hidden) this.stop();
@@ -337,11 +325,21 @@ class QrMenuLoop extends HTMLElement {
 
   start() {
     if (!this.isReady || this.running || document.hidden) return;
+
     this.running = true;
-    this.abortController = new AbortController();
-    this.runLoop(this.abortController.signal).catch((error) => {
-      if (error?.name !== 'AbortError') console.error(error);
-    });
+    const controller = new AbortController();
+    this.abortController = controller;
+
+    this.runLoop(controller.signal)
+      .catch((error) => {
+        if (error?.name !== 'AbortError') console.error(error);
+      })
+      .finally(() => {
+        if (this.abortController === controller) {
+          this.abortController = null;
+          this.running = false;
+        }
+      });
   }
 
   stop() {
@@ -356,56 +354,54 @@ class QrMenuLoop extends HTMLElement {
     const speed = Number.parseFloat(this.getAttribute('speed') || '1');
     const duration = (ms) => reduced ? Math.min(ms, 180) : ms / Math.max(0.35, speed);
     const easeOut = 'cubic-bezier(.16,1,.3,1)';
-    const easeSoft = 'cubic-bezier(.45,0,.2,1)';
-
     while (!signal.aborted) {
       this.resetScene();
 
-      // ① Idle Table Stand (900ms)
-      await sleep(duration(900), signal);
+      // ① QR stand waits briefly before a phone scans it.
+      await sleep(duration(720), signal);
 
-      // ② Phone Enters (empty screen - camera view and menu are both hidden)
+      // ② Phone enters.
       await animate(this.phone,
         [
           { opacity: 0, transform: 'translate3d(55%, 5%, 0) rotate(8deg) scale(.93)' },
           { opacity: 1, offset: .25 },
           { opacity: 1, transform: 'translate3d(0, 0, 0) rotate(-2deg) scale(1)' }
         ],
-        { duration: duration(1000), easing: easeOut }, signal);
+        { duration: duration(780), easing: easeOut }, signal);
 
-      await sleep(duration(300), signal);
+      await sleep(duration(160), signal);
 
-      // ③ Phone screen turns on to show viewfinder, and scanning beam sweeps
+      // ③ Viewfinder appears and scans once.
       await Promise.all([
         animate(this.cameraView,
           [{ opacity: 0 }, { opacity: 1 }],
-          { duration: duration(250), easing: easeOut }, signal),
+          { duration: duration(180), easing: easeOut }, signal),
         animate(this.scanLine,
           [
             { transform: 'translateY(-300%)', opacity: 0 },
             { opacity: 1, offset: .12 },
             { transform: 'translateY(300%)', opacity: 0 }
           ],
-          { duration: duration(900), delay: duration(100), easing: easeSoft }, signal)
+          { duration: duration(620), delay: duration(60), easing: easeOut }, signal)
       ]);
 
-      await sleep(duration(100), signal);
+      await sleep(duration(80), signal);
 
-      // ④ Menu Reveal on Phone Screen (camera fades out, menu fades in)
+      // ④ The menu replaces the viewfinder.
       await Promise.all([
         animate(this.cameraView,
           [{ opacity: 1 }, { opacity: 0 }],
-          { duration: duration(350), easing: easeOut }, signal),
+          { duration: duration(280), easing: easeOut }, signal),
         animate(this.phoneMenu,
           [{ opacity: 0 }, { opacity: 1 }],
-          { duration: duration(400), easing: easeOut }, signal)
+          { duration: duration(320), easing: easeOut }, signal)
       ]);
 
-      await sleep(duration(900), signal);
+      await sleep(duration(480), signal);
 
-      // ⑤ Menu Expands beyond phone (full menu slides up over the scene, table scene fades out)
+      // ⑤ The full menu takes over without auto-scrolling its content.
       this.menuStage.style.opacity = '1';
-      this.menuStage.style.pointerEvents = 'auto';
+      this.menuStage.style.pointerEvents = 'none';
 
       await Promise.all([
         animate(this.menuSurface,
@@ -413,47 +409,31 @@ class QrMenuLoop extends HTMLElement {
             { opacity: 0, transform: 'translate3d(0, 30px, 0)' },
             { opacity: 1, transform: 'translate3d(0, 0, 0)' }
           ],
-          { duration: duration(750), easing: easeOut }, signal),
+          { duration: duration(600), easing: easeOut }, signal),
         animate(this.tableScene,
           [{ opacity: 1 }, { opacity: 0 }],
-          { duration: duration(600), easing: easeOut }, signal)
+          { duration: duration(460), easing: easeOut }, signal)
       ]);
 
-      // ⑥ Gentle Menu Scroll
-      await sleep(duration(300), signal);
-      await animate(this.fullScroll,
-        [
-          { transform: 'translate3d(0, 0, 0)' },
-          { transform: 'translate3d(0, -14%, 0)' }
-        ],
-        { duration: duration(2000), easing: easeSoft }, signal);
+      await sleep(duration(1100), signal);
 
-      await sleep(duration(900), signal);
-
-      // ⑦ Smooth Return to Startframe (full menu slides down, table scene fades back in)
+      // ⑥ A short reset begins the next explanatory cycle.
       await Promise.all([
+        animate(this.menuStage,
+          [{ opacity: 1 }, { opacity: 0 }],
+          { duration: duration(260), easing: easeOut }, signal),
         animate(this.menuSurface,
-          [
-            { opacity: 1, transform: 'translate3d(0, 0, 0)' },
-            { opacity: 0, transform: 'translate3d(0, 30px, 0)' }
-          ],
-          { duration: duration(750), easing: easeSoft }, signal),
+          [{ opacity: 1, transform: 'translate3d(0, 0, 0)' }, { opacity: 0, transform: 'translate3d(0, -14px, 0)' }],
+          { duration: duration(260), easing: easeOut }, signal),
         animate(this.tableScene,
           [{ opacity: 0 }, { opacity: 1 }],
-          { duration: duration(850), delay: duration(100), easing: easeOut }, signal),
+          { duration: duration(300), easing: easeOut }, signal),
         animate(this.phone,
-          [{ opacity: 1 }, { opacity: 0 }],
-          { duration: duration(500), easing: easeOut }, signal)
+          [{ opacity: 1, transform: 'translate3d(0, 0, 0) rotate(-2deg) scale(1)' }, { opacity: 0, transform: 'translate3d(22%, 4%, 0) rotate(4deg) scale(.96)' }],
+          { duration: duration(300), easing: easeOut }, signal)
       ]);
 
-      // Clean up properties explicitly at the end of the loop
-      this.menuStage.style.opacity = '0';
-      this.menuStage.style.pointerEvents = 'none';
-      this.fullScroll.style.transform = 'translate3d(0, 0, 0)';
-      this.cameraView.style.opacity = '0';
-      this.phoneMenu.style.opacity = '0';
-
-      await sleep(duration(600), signal);
+      await sleep(duration(260), signal);
     }
   }
 }

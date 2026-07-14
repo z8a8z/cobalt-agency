@@ -288,12 +288,8 @@
         rgba(255,255,255,0.04) 50%,
         transparent 80%
       );
-      animation: shimmer 2.2s ease-in-out infinite;
       background-size: 200% 100%;
-    }
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background-position: 48% 0;
     }
     /* Give each post a slightly different shade */
     .ig-post:nth-child(2n)  { background: #161616; }
@@ -616,26 +612,17 @@
   const biolinkScreen  = document.getElementById('biolinkScreen');
   const flash          = document.getElementById('flash');
 
-  /* ── Timing constants (ms) ── */
-  const T_PAUSE_BEFORE_MOVE = 1800;
-  const T_FINGER_TRAVEL     = 700;
-  const T_PRESS_HOLD        = 400;
-  const T_FLASH             = 120;
-  const T_BIOLINK_SHOW      = 350;
-  const T_BIOLINK_DWELL     = 3200;
-  const T_RETURN_FADE       = 500;
-  const T_IG_RESET_DWELL    = 300;
+  const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+  let cycleVersion = 0;
 
-  /* ── Inline-style helpers ── */
   function setInstant(el, props) {
     el.style.transition = 'none';
     Object.assign(el.style, props);
     el.getBoundingClientRect();
   }
 
-  function animateTo(el, transition, props) {
-    el.style.transition = transition;
-    el.getBoundingClientRect();
+  function animateTo(el, props, duration = 380) {
+    el.style.transition = `opacity ${duration}ms cubic-bezier(0.16,1,0.3,1), transform ${duration}ms cubic-bezier(0.16,1,0.3,1), left ${duration}ms cubic-bezier(0.16,1,0.3,1), top ${duration}ms cubic-bezier(0.16,1,0.3,1)`;
     Object.assign(el.style, props);
   }
 
@@ -643,6 +630,8 @@
     setInstant(igScreen,       { opacity: '1', transform: 'translateY(0)',    pointerEvents: 'auto' });
     setInstant(biolinkScreen,  { opacity: '0', transform: 'translateY(32px)', pointerEvents: 'none' });
     setInstant(finger,         { opacity: '0', transform: 'scale(0.6)' });
+    setInstant(flash,          { opacity: '0' });
+    bioLinkBtn.classList.remove('tapping');
   }
 
   function getBtnPos() {
@@ -661,68 +650,70 @@
     };
   }
 
-  function runCycle() {
-    resetAll();
+  async function runCycle(version) {
+    while (version === cycleVersion && !document.hidden) {
+      resetAll();
+      await wait(900);
+      if (version !== cycleVersion || document.hidden) break;
 
-    /* Step 1: Dwell on Instagram */
-    setTimeout(() => {
       const pos = getBtnPos();
+      setInstant(finger, {
+        left: `${pos.x + 48}px`,
+        top: `${pos.y - 30}px`,
+        opacity: '0',
+        transform: 'scale(0.65)',
+      });
+      animateTo(finger, { opacity: '1', transform: 'scale(1)' }, 220);
+      await wait(260);
+      if (version !== cycleVersion || document.hidden) break;
 
-      /* Step 2: Finger fades in offset */
-      setInstant(finger, { left: (pos.x + 55) + 'px', top: (pos.y - 38) + 'px', opacity: '0', transform: 'scale(0.6)' });
-      animateTo(finger, 'opacity 0.3s ease, transform 0.3s ease', { opacity: '1', transform: 'scale(1)' });
+      animateTo(finger, { left: `${pos.x - 13}px`, top: `${pos.y - 13}px` }, 460);
+      await wait(520);
+      if (version !== cycleVersion || document.hidden) break;
 
-      setTimeout(() => {
-        /* Step 3: Finger travels to link */
-        animateTo(finger,
-          'left 0.65s cubic-bezier(0.25,1,0.5,1), top 0.65s cubic-bezier(0.25,1,0.5,1)',
-          { left: (pos.x - 13) + 'px', top: (pos.y - 13) + 'px' }
-        );
+      bioLinkBtn.classList.add('tapping');
+      animateTo(finger, { transform: 'scale(0.76)' }, 120);
+      animateTo(flash, { opacity: '0.18' }, 100);
+      await wait(150);
+      if (version !== cycleVersion || document.hidden) break;
 
-        setTimeout(() => {
-          /* Step 4: Press */
-          animateTo(finger, 'transform 0.15s ease', { transform: 'scale(0.72)' });
-          bioLinkBtn.classList.add('tapping');
+      bioLinkBtn.classList.remove('tapping');
+      animateTo(finger, { opacity: '0' }, 140);
+      animateTo(flash, { opacity: '0' }, 180);
+      animateTo(igScreen, { opacity: '0', transform: 'translateY(-18px)', pointerEvents: 'none' }, 360);
+      animateTo(biolinkScreen, { opacity: '1', transform: 'translateY(0)', pointerEvents: 'none' }, 440);
+      await wait(2_700);
+      if (version !== cycleVersion || document.hidden) break;
 
-          setTimeout(() => {
-            /* Step 5: Flash + hide finger */
-            flash.style.transition = 'opacity 0.08s ease';
-            flash.style.opacity = '0.22';
-            animateTo(finger, 'opacity 0.15s ease', { opacity: '0' });
-            bioLinkBtn.classList.remove('tapping');
-
-            setTimeout(() => {
-              flash.style.opacity = '0';
-
-              /* Step 6: Instagram exits */
-              animateTo(igScreen, 'opacity 0.45s ease, transform 0.45s ease', {
-                opacity: '0', transform: 'translateY(-24px)', pointerEvents: 'none'
-              });
-
-              setTimeout(() => {
-                /* Step 7: Bio Link page slides in */
-                animateTo(biolinkScreen,
-                  'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)',
-                  { opacity: '1', transform: 'translateY(0)', pointerEvents: 'auto' }
-                );
-
-                /* Step 8: Dwell, then fade out and loop */
-                setTimeout(() => {
-                  animateTo(biolinkScreen, 'opacity 0.4s ease, transform 0.4s ease', {
-                    opacity: '0', transform: 'translateY(-18px)', pointerEvents: 'none'
-                  });
-                  setTimeout(() => setTimeout(runCycle, T_IG_RESET_DWELL), T_RETURN_FADE);
-                }, T_BIOLINK_DWELL);
-
-              }, T_BIOLINK_SHOW);
-            }, T_FLASH + 80);
-          }, T_PRESS_HOLD);
-        }, T_FINGER_TRAVEL);
-      }, 80);
-    }, T_PAUSE_BEFORE_MOVE);
+      animateTo(biolinkScreen, { opacity: '0', transform: 'translateY(-14px)' }, 360);
+      await wait(440);
+    }
   }
 
-  window.addEventListener('DOMContentLoaded', () => setTimeout(runCycle, 500));
+  function startCycle() {
+    cycleVersion += 1;
+    runCycle(cycleVersion);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      igScreen.style.display = 'none';
+      biolinkScreen.style.opacity = '1';
+      biolinkScreen.style.transform = 'translateY(0)';
+      biolinkScreen.style.pointerEvents = 'none';
+      return;
+    }
+
+    startCycle();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      startCycle();
+    } else {
+      cycleVersion += 1;
+    }
+  });
 })()
 
 

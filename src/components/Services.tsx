@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useElementInView } from '../hooks/useElementInView';
-import { usePointerSpotlight } from '../hooks/usePointerSpotlight';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import './QrMenuLoop/qr-menu-loop.js';
 import './Services.css';
@@ -10,9 +9,7 @@ function Services() {
   const headerRef = useScrollReveal<HTMLDivElement>();
   const card1Ref = useScrollReveal<HTMLDivElement>();
   const card2Ref = useScrollReveal<HTMLDivElement>();
-  const isPreviewActive = useElementInView(sectionRef, { rootMargin: '250px 0px' });
-  const bioLinkSpotlight = usePointerSpotlight<HTMLDivElement>();
-  const qrMenuSpotlight = usePointerSpotlight<HTMLDivElement>();
+  const isPreviewActive = useElementInView(sectionRef, { rootMargin: '100px 0px' });
   const qrContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,9 +46,7 @@ function Services() {
         <div className="services-grid">
           <div
             ref={card1Ref}
-            className="card accent-border-top service-card spotlight-card reveal reveal-delay-1"
-            style={bioLinkSpotlight.style}
-            {...bioLinkSpotlight.handlers}
+            className="card accent-border-top service-card reveal reveal-delay-1"
           >
             <div className="service-card-content">
               <div className="service-card-header">
@@ -100,9 +95,7 @@ function Services() {
 
           <div
             ref={card2Ref}
-            className="card accent-border-top service-card spotlight-card reveal reveal-delay-2"
-            style={qrMenuSpotlight.style}
-            {...qrMenuSpotlight.handlers}
+            className="card accent-border-top service-card reveal reveal-delay-2"
           >
             <div className="service-card-content">
               <div className="service-card-header">

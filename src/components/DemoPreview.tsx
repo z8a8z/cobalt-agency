@@ -1,13 +1,11 @@
 import {
   type KeyboardEvent,
-  type MutableRefObject,
   type RefObject,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { setDemoAutoScroll } from '../lib/demoAutoscroll';
 import { useElementInView } from '../hooks/useElementInView';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import './DemoPreview.css';
@@ -22,7 +20,6 @@ interface DemoMockup {
 
 interface MockupCarousel {
   centerPhone: (index: number) => void;
-  currentIndexRef: MutableRefObject<number>;
   focusedIndex: number;
   onScroll: () => void;
   trackRef: RefObject<HTMLDivElement | null>;
@@ -113,105 +110,7 @@ function useMockupCarousel(itemCount: number): MockupCarousel {
     }
   }, [focusedIndex, itemCount]);
 
-  return { centerPhone, currentIndexRef, focusedIndex, onScroll, trackRef };
-}
-
-interface CarouselAutoplayOptions {
-  active: boolean;
-  centerPhone: (index: number) => void;
-  currentIndexRef: MutableRefObject<number>;
-  itemCount: number;
-  trackRef: RefObject<HTMLDivElement | null>;
-}
-
-function useCarouselAutoplay({
-  active,
-  centerPhone,
-  currentIndexRef,
-  itemCount,
-  trackRef,
-}: CarouselAutoplayOptions) {
-  useEffect(() => {
-    const track = trackRef.current;
-
-    if (!active || !track) return;
-
-    let timerId: number | null = null;
-    let paused = false;
-
-    const clearTimer = () => {
-      if (timerId !== null) {
-        window.clearTimeout(timerId);
-        timerId = null;
-      }
-    };
-
-    const schedule = (delay = 4_000) => {
-      clearTimer();
-      timerId = window.setTimeout(() => {
-        if (!paused && !document.hidden) {
-          centerPhone((currentIndexRef.current + 1) % itemCount);
-        }
-
-        schedule();
-      }, delay);
-    };
-
-    const pause = () => {
-      paused = true;
-    };
-    const resume = () => {
-      paused = false;
-    };
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        clearTimer();
-      } else {
-        schedule();
-      }
-    };
-
-    track.addEventListener('pointerenter', pause);
-    track.addEventListener('pointerleave', resume);
-    track.addEventListener('focusin', pause);
-    track.addEventListener('focusout', resume);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    schedule(4_500);
-
-    return () => {
-      clearTimer();
-      track.removeEventListener('pointerenter', pause);
-      track.removeEventListener('pointerleave', resume);
-      track.removeEventListener('focusin', pause);
-      track.removeEventListener('focusout', resume);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [active, centerPhone, currentIndexRef, itemCount, trackRef]);
-}
-
-function setFrameReference(
-  frameRefs: MutableRefObject<Map<string, HTMLIFrameElement>>,
-  id: string,
-  frame: HTMLIFrameElement | null,
-) {
-  if (frame) {
-    frameRefs.current.set(id, frame);
-  } else {
-    frameRefs.current.delete(id);
-  }
-}
-
-function syncFrameAnimations(
-  frameRefs: MutableRefObject<Map<string, HTMLIFrameElement>>,
-  mockups: DemoMockup[],
-  focusedIndex: number,
-  active: boolean,
-) {
-  const activeMockupId = mockups[focusedIndex]?.id;
-
-  frameRefs.current.forEach((frame, id) => {
-    setDemoAutoScroll(frame, active && id === activeMockupId);
-  });
+  return { centerPhone, focusedIndex, onScroll, trackRef };
 }
 
 function DemoPreview() {
@@ -220,43 +119,6 @@ function DemoPreview() {
   const [activePreview, setActivePreview] = useState<PreviewType>('biolink');
   const bioLinkCarousel = useMockupCarousel(BIO_LINK_MOCKUPS.length);
   const qrMenuCarousel = useMockupCarousel(QR_MENU_MOCKUPS.length);
-  const bioLinkFramesRef = useRef(new Map<string, HTMLIFrameElement>());
-  const qrMenuFramesRef = useRef(new Map<string, HTMLIFrameElement>());
-
-  useCarouselAutoplay({
-    active: isDemoInView && activePreview === 'biolink',
-    centerPhone: bioLinkCarousel.centerPhone,
-    currentIndexRef: bioLinkCarousel.currentIndexRef,
-    itemCount: BIO_LINK_MOCKUPS.length,
-    trackRef: bioLinkCarousel.trackRef,
-  });
-  useCarouselAutoplay({
-    active: isDemoInView && activePreview === 'qrmenu',
-    centerPhone: qrMenuCarousel.centerPhone,
-    currentIndexRef: qrMenuCarousel.currentIndexRef,
-    itemCount: QR_MENU_MOCKUPS.length,
-    trackRef: qrMenuCarousel.trackRef,
-  });
-
-  useEffect(() => {
-    syncFrameAnimations(
-      bioLinkFramesRef,
-      BIO_LINK_MOCKUPS,
-      bioLinkCarousel.focusedIndex,
-      isDemoInView && activePreview === 'biolink',
-    );
-    syncFrameAnimations(
-      qrMenuFramesRef,
-      QR_MENU_MOCKUPS,
-      qrMenuCarousel.focusedIndex,
-      isDemoInView && activePreview === 'qrmenu',
-    );
-  }, [
-    activePreview,
-    bioLinkCarousel.focusedIndex,
-    isDemoInView,
-    qrMenuCarousel.focusedIndex,
-  ]);
 
   const handlePhoneKeyDown = useCallback((
     event: KeyboardEvent<HTMLDivElement>,
@@ -321,18 +183,15 @@ function DemoPreview() {
                 onClick={() => bioLinkCarousel.centerPhone(index)}
                 onKeyDown={(event) => handlePhoneKeyDown(event, index, bioLinkCarousel.centerPhone)}
               >
-                {isDemoInView && (
+                {isDemoInView && Math.abs(bioLinkCarousel.focusedIndex - index) <= 1 ? (
                   <iframe
-                    ref={(frame) => setFrameReference(bioLinkFramesRef, mockup.id, frame)}
                     src={mockup.src}
                     className="demo-preview__iframe-phone"
                     title={mockup.title}
-                    loading="lazy"
-                    onLoad={(event) => setDemoAutoScroll(
-                      event.currentTarget,
-                      bioLinkCarousel.focusedIndex === index,
-                    )}
+                    loading={bioLinkCarousel.focusedIndex === index ? 'eager' : 'lazy'}
                   />
+                ) : (
+                  <div className="demo-preview__phone-placeholder" aria-hidden="true" />
                 )}
               </div>
             ))}
@@ -357,18 +216,15 @@ function DemoPreview() {
                 onClick={() => qrMenuCarousel.centerPhone(index)}
                 onKeyDown={(event) => handlePhoneKeyDown(event, index, qrMenuCarousel.centerPhone)}
               >
-                {isDemoInView && (
+                {isDemoInView && Math.abs(qrMenuCarousel.focusedIndex - index) <= 1 ? (
                   <iframe
-                    ref={(frame) => setFrameReference(qrMenuFramesRef, mockup.id, frame)}
                     src={mockup.src}
                     className="demo-preview__iframe-phone"
                     title={mockup.title}
-                    loading="lazy"
-                    onLoad={(event) => setDemoAutoScroll(
-                      event.currentTarget,
-                      qrMenuCarousel.focusedIndex === index,
-                    )}
+                    loading={qrMenuCarousel.focusedIndex === index ? 'eager' : 'lazy'}
                   />
+                ) : (
+                  <div className="demo-preview__phone-placeholder" aria-hidden="true" />
                 )}
               </div>
             ))}

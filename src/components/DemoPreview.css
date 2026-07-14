@@ -116,12 +116,15 @@
   overflow: hidden;
   display: block;
   border-radius: var(--radius-xl);
-  transition: transform var(--duration-fast) var(--ease-smooth);
 }
 
-/* Hover lift on focused phone — applied on wrapper to prevent flicker loop */
-.demo-preview__phone-wrapper--focused:hover .demo-preview__iframe-phone {
-  transform: translateY(-8px);
+.demo-preview__phone-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(145deg, hsla(var(--primary-hsl), 0.16), transparent 42%),
+    var(--bg-elevated);
 }
 
 /* ── Ambient Glow ── */

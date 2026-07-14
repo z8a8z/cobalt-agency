@@ -11,14 +11,12 @@ export default function VisitCta() {
     threshold: 0.18,
     rootMargin: '0px 0px -8% 0px',
   });
-  const surfaceRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    const surface = surfaceRef.current;
     const button = buttonRef.current;
 
-    if (!surface || !button) return;
+    if (!button) return;
 
     const supportsInteraction = window.matchMedia(
       '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
@@ -26,22 +24,9 @@ export default function VisitCta() {
 
     if (!supportsInteraction.matches) return;
 
-    let surfaceFrameId = 0;
     let buttonFrameId = 0;
     let buttonBounds: DOMRect | null = null;
     let buttonPointer = { x: 0, y: 0 };
-
-    const updateSurfaceGlow = (event: PointerEvent) => {
-      cancelAnimationFrame(surfaceFrameId);
-      surfaceFrameId = requestAnimationFrame(() => {
-        const rect = surface.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 100;
-        const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-        surface.style.setProperty('--pointer-x', `${x}%`);
-        surface.style.setProperty('--pointer-y', `${y}%`);
-      });
-    };
 
     const updateButtonPosition = (event: PointerEvent) => {
       const rect = buttonBounds ?? button.getBoundingClientRect();
@@ -79,15 +64,12 @@ export default function VisitCta() {
       buttonBounds = button.getBoundingClientRect();
     };
 
-    surface.addEventListener('pointermove', updateSurfaceGlow, { passive: true });
     button.addEventListener('pointerenter', cacheButtonBounds, { passive: true });
     button.addEventListener('pointermove', updateButtonPosition, { passive: true });
     button.addEventListener('pointerleave', resetButtonPosition);
 
     return () => {
-      cancelAnimationFrame(surfaceFrameId);
       cancelAnimationFrame(buttonFrameId);
-      surface.removeEventListener('pointermove', updateSurfaceGlow);
       button.removeEventListener('pointerenter', cacheButtonBounds);
       button.removeEventListener('pointermove', updateButtonPosition);
       button.removeEventListener('pointerleave', resetButtonPosition);
@@ -104,7 +86,7 @@ export default function VisitCta() {
       <div className="visit-cta__ambient" aria-hidden="true" />
 
       <div className="visit-cta__container">
-        <div className="visit-cta__surface" ref={surfaceRef}>
+        <div className="visit-cta__surface">
           <div className="visit-cta__content">
             <div className="visit-cta__heading-wrap">
               <span className="visit-cta__signal" aria-hidden="true">
@@ -182,22 +164,6 @@ export default function VisitCta() {
               decoding="async"
             />
             <div className="visit-cta__image-shade" />
-
-            <svg
-              className="visit-cta__route"
-              viewBox="0 0 560 520"
-              preserveAspectRatio="none"
-            >
-              <path
-                className="visit-cta__route-shadow"
-                d="M38 456C143 412 146 320 252 301c109-20 109-127 269-187"
-              />
-              <path
-                className="visit-cta__route-line"
-                pathLength="1"
-                d="M38 456C143 412 146 320 252 301c109-20 109-127 269-187"
-              />
-            </svg>
 
             <span className="visit-cta__map-dot visit-cta__map-dot--start" />
             <span className="visit-cta__map-pin">

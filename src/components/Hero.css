@@ -3,12 +3,6 @@
    ═══════════════════════════════════════════════════════ */
 
 .hero {
-  --hero-pointer-x: 68%;
-  --hero-pointer-y: 38%;
-  --hero-tilt-x: 0deg;
-  --hero-tilt-y: 0deg;
-  --hero-shift-x: 0px;
-  --hero-shift-y: 0px;
   position: relative;
   isolation: isolate;
   min-block-size: max(760px, 100svh);
@@ -55,26 +49,6 @@
   background-position: center;
   mask-image: radial-gradient(ellipse 78% 74% at 55% 46%, black 22%, transparent 76%);
   -webkit-mask-image: radial-gradient(ellipse 78% 74% at 55% 46%, black 22%, transparent 76%);
-  animation: hero-grid-drift 26s linear infinite;
-  will-change: transform;
-}
-
-@keyframes hero-grid-drift {
-  to { transform: translate3d(72px, 72px, 0); }
-}
-
-.hero__pointer-light {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.62;
-  background: radial-gradient(
-    circle 360px at var(--hero-pointer-x) var(--hero-pointer-y),
-    hsla(var(--primary-hsl), 0.13),
-    transparent 72%
-  );
-  transition: opacity 450ms var(--ease-smooth);
 }
 
 .hero__beam {
@@ -295,8 +269,6 @@
   width: min(520px, 94%);
   border: 1px solid hsla(var(--primary-hsl), 0.12);
   box-shadow: 0 0 80px hsla(var(--primary-hsl), 0.06) inset;
-  animation: hero-orbit-spin 24s linear infinite;
-  will-change: transform;
 }
 
 .hero__orbit--outer::before,
@@ -307,6 +279,38 @@
   border-radius: 50%;
   background: var(--primary);
   box-shadow: 0 0 18px var(--primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero--in-view .hero__grid-bg {
+    animation: hero-grid-drift 22s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  .hero--in-view .hero__orbit--outer {
+    animation: hero-orbit-drift 16s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  .hero--in-view .hero__orbit--inner {
+    animation: hero-orbit-drift-reverse 13s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+
+@keyframes hero-grid-drift {
+  from { transform: translate3d(-10px, -6px, 0); }
+  to { transform: translate3d(10px, 6px, 0); }
+}
+
+@keyframes hero-orbit-drift {
+  from { transform: translate(-50%, -50%) rotate(-2deg) scale(0.99); }
+  to { transform: translate(-50%, -50%) rotate(3deg) scale(1.01); }
+}
+
+@keyframes hero-orbit-drift-reverse {
+  from { transform: translate(-50%, -50%) rotate(2deg) scale(1.01); }
+  to { transform: translate(-50%, -50%) rotate(-3deg) scale(0.99); }
 }
 
 .hero__orbit--outer::before {
@@ -327,8 +331,6 @@
 .hero__orbit--inner {
   width: min(390px, 74%);
   border: 1px dashed hsla(var(--primary-hsl), 0.16);
-  animation: hero-orbit-spin-reverse 18s linear infinite;
-  will-change: transform;
 }
 
 .hero__orbit--inner::before {
@@ -338,16 +340,6 @@
   height: 5px;
 }
 
-@keyframes hero-orbit-spin {
-  from { transform: translate(-50%, -50%) rotate(0); }
-  to { transform: translate(-50%, -50%) rotate(1turn); }
-}
-
-@keyframes hero-orbit-spin-reverse {
-  from { transform: translate(-50%, -50%) rotate(1turn); }
-  to { transform: translate(-50%, -50%) rotate(0); }
-}
-
 .hero__stage-dot {
   position: absolute;
   width: 7px;
@@ -355,47 +347,25 @@
   border-radius: 50%;
   background: hsla(var(--text-primary-hsl), 0.68);
   box-shadow: 0 0 17px hsla(var(--primary-hsl), 0.58);
-  animation: hero-dot-breathe 3.8s ease-in-out infinite;
 }
 
 .hero__stage-dot--one { inset-block-start: 18%; inset-inline-end: 5%; }
-.hero__stage-dot--two { inset-block-end: 23%; inset-inline-start: 3%; animation-delay: -1.4s; }
-.hero__stage-dot--three { inset-block-start: 48%; inset-inline-start: 0; width: 4px; height: 4px; animation-delay: -2.3s; }
-
-@keyframes hero-dot-breathe {
-  50% { opacity: 0.28; transform: scale(0.72); }
-}
+.hero__stage-dot--two { inset-block-end: 23%; inset-inline-start: 3%; }
+.hero__stage-dot--three { inset-block-start: 48%; inset-inline-start: 0; width: 4px; height: 4px; }
 
 .hero__phone-scene {
   position: relative;
   z-index: 3;
   opacity: 0;
-  transform: translateY(44px) scale(0.91);
-  transition:
-    opacity 850ms var(--ease-smooth) 200ms,
-    transform 1s cubic-bezier(0.16, 1, 0.3, 1) 200ms;
+  transition: opacity 500ms var(--ease-smooth) 120ms;
 }
 
 .hero--ready .hero__phone-scene {
   opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
 .hero__phone-wrapper {
   position: relative;
-  transform:
-    translate3d(var(--hero-shift-x), var(--hero-shift-y), 0)
-    rotateX(var(--hero-tilt-x))
-    rotateY(var(--hero-tilt-y));
-  transform-style: preserve-3d;
-  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
-  animation: hero-phone-float 5.5s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes hero-phone-float {
-  0%, 100% { margin-top: 0; }
-  50% { margin-top: -12px; }
 }
 
 .hero__phone-shell {
@@ -451,12 +421,6 @@
   filter: blur(36px);
   opacity: 0.82;
   transform: translate(-50%, -50%);
-  animation: hero-glow-pulse 4.8s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes hero-glow-pulse {
-  50% { opacity: 0.58; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 @media (max-width: 1060px) {
@@ -497,10 +461,6 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, calc(-50% + 34px)) scale(0.82);
-  }
-
-  .hero--ready .hero__phone-scene {
     transform: translate(-50%, -50%) scale(0.86);
   }
 }
@@ -519,10 +479,6 @@
 
   .hero__phone-scene {
     transform-origin: center;
-    transform: translate(-50%, calc(-50% + 28px)) scale(0.58);
-  }
-
-  .hero--ready .hero__phone-scene {
     transform: translate(-50%, -50%) scale(0.63);
   }
 
@@ -550,10 +506,6 @@
   }
 
   .hero__phone-scene {
-    transform: translate(-50%, calc(-50% + 24px)) scale(0.48);
-  }
-
-  .hero--ready .hero__phone-scene {
     transform: translate(-50%, -50%) scale(0.52);
   }
 
@@ -567,22 +519,11 @@
   }
 }
 
-@media (hover: none) {
-  .hero__pointer-light {
-    background: radial-gradient(circle 300px at 72% 31%, hsla(var(--primary-hsl), 0.11), transparent 72%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero__grid-bg,
   .hero__orbit,
   .hero__stage-dot,
-  .hero__phone-wrapper,
   .hero__glow {
     animation: none;
-  }
-
-  .hero__phone-wrapper {
-    transform: none;
   }
 }
