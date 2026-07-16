@@ -11,8 +11,18 @@ import Footer from './components/Footer'
 import IntroOverlay from './components/IntroOverlay'
 import FloatingBot from './components/FloatingBot'
 import PerformanceDashboard from './components/PerformanceDashboard'
+import MaintenancePage from './components/MaintenancePage'
+import { MAINTENANCE_MODE } from './config/site'
 
 function App() {
+  if (MAINTENANCE_MODE) {
+    return <MaintenancePage />
+  }
+
+  return <LiveSite />
+}
+
+function LiveSite() {
   const [introActive, setIntroActive] = useState(true);
 
   useEffect(() => {
