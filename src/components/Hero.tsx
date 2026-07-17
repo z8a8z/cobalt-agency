@@ -41,11 +41,13 @@ function Hero({ introActive }: HeroProps) {
     if (!finePointer.matches || reducedMotion.matches) return;
 
     let frameId = 0;
+    let buttonBounds: DOMRect | null = null;
 
     const handlePointerMove = (event: PointerEvent) => {
       window.cancelAnimationFrame(frameId);
       frameId = window.requestAnimationFrame(() => {
-        const rect = button.getBoundingClientRect();
+        const rect = buttonBounds ?? button.getBoundingClientRect();
+        buttonBounds = rect;
         const x = event.clientX - (rect.left + rect.width / 2);
         const y = event.clientY - (rect.top + rect.height / 2);
         const maxOffset = 11;
@@ -59,15 +61,22 @@ function Hero({ introActive }: HeroProps) {
 
     const resetButton = () => {
       window.cancelAnimationFrame(frameId);
+      buttonBounds = null;
       button.style.setProperty('--hero-button-x', '0px');
       button.style.setProperty('--hero-button-y', '0px');
     };
 
+    const cacheButtonBounds = () => {
+      buttonBounds = button.getBoundingClientRect();
+    };
+
+    button.addEventListener('pointerenter', cacheButtonBounds, { passive: true });
     button.addEventListener('pointermove', handlePointerMove);
     button.addEventListener('pointerleave', resetButton);
 
     return () => {
       window.cancelAnimationFrame(frameId);
+      button.removeEventListener('pointerenter', cacheButtonBounds);
       button.removeEventListener('pointermove', handlePointerMove);
       button.removeEventListener('pointerleave', resetButton);
     };
@@ -87,10 +96,10 @@ function Hero({ introActive }: HeroProps) {
         <div className="hero__content">
           <h1 className="hero__title">
             <span className="hero__title-line hero__title-line--one">
-              نبني لعملك <span className="gradient-text">صفحة احترافية</span>،
+              نبني حضورك <span className="gradient-text">الرقمي</span>،
             </span>{' '}
             <span className="hero__title-line hero__title-line--two">
-              يوصلها زبونك <span className="gradient-text">بثانية</span>.
+              بالشكل الذي <span className="gradient-text">يمثلك</span>.
             </span>
           </h1>
 
@@ -105,8 +114,8 @@ function Hero({ introActive }: HeroProps) {
               <span>ابدأ الآن</span>
               <ArrowIcon />
             </a>
-            <a href="#pricing" className="btn btn-secondary hero__secondary-cta">
-              <span>شوف الأسعار</span>
+            <a href="#services" className="btn btn-secondary hero__secondary-cta">
+              <span>استكشف الخدمات</span>
               <ArrowIcon />
             </a>
           </div>
@@ -121,16 +130,23 @@ function Hero({ introActive }: HeroProps) {
             <span className="hero__stage-dot hero__stage-dot--three" />
           </div>
 
-          <div className="hero__phone-scene">
-            <div className="hero__phone-shadow" aria-hidden="true" />
-            <div className="hero__phone-wrapper">
-              <div className="hero__phone-shell">
-                <iframe
-                  src="/demos/bio-links/cobalt_agency_bio_link.html"
-                  className="hero__phone-iframe"
-                  title="معاينة صفحة Bio Link على الهاتف"
-                  loading="eager"
-                />
+          <div className="hero__project-scene" aria-label="معاينة لمشروع رقمي">
+            <div className="hero__browser">
+              <div className="hero__browser-bar">
+                <span /><span /><span />
+                <i />
+              </div>
+              <div className="hero__browser-page">
+                <div className="hero__browser-copy">
+                  <span className="hero__browser-kicker">حضور رقمي</span>
+                  <strong>خلِّ عملك<br />أسهل للاختيار.</strong>
+                  <p />
+                  <p />
+                  <span className="hero__browser-cta">اكتشف المشروع</span>
+                </div>
+                <div className="hero__browser-art">
+                  <span /><span /><span /><span />
+                </div>
               </div>
             </div>
           </div>

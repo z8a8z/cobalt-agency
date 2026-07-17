@@ -22,7 +22,7 @@ export default function Footer() {
             <span className="footer__logo-mark">
               <img src={cobaltLogo} alt="" />
             </span>
-            <span>Cobalt</span>
+            <span>كوبالت</span>
           </div>
           <p className="footer__brand-desc">
             خدمات رقمية بسيطة للأعمال المحلية.
@@ -42,7 +42,7 @@ export default function Footer() {
               <ArrowIcon />
             </a>
             <a href="#pricing">
-              <span>الأسعار</span>
+              <span>نطاق المشروع</span>
               <ArrowIcon />
             </a>
             <a href="#about">
@@ -126,7 +126,7 @@ export default function Footer() {
       <div className="footer__bottom">
         <p>
           <span className="ltr-text footer__copyright-en">
-            © 2025 Cobalt Agency.
+            © 2025 وكالة كوبالت.
           </span>{' '}
           جميع الحقوق محفوظة.
         </p>

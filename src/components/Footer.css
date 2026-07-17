@@ -160,7 +160,7 @@
 }
 
 .footer__logo > span:last-child {
-  font-family: var(--font-en);
+  font-family: var(--font-ar);
   font-size: clamp(1.2rem, 2vw, 1.45rem);
   font-weight: 750;
   letter-spacing: -0.025em;

@@ -92,7 +92,7 @@
 
 .team-profile__surface {
   position: relative;
-  min-height: 610px;
+  min-height: 540px;
   height: 100%;
   overflow: hidden;
   display: grid;
@@ -119,7 +119,7 @@
 .team-profile__media {
   --team-image-position: 50% 32%;
   position: relative;
-  min-height: 420px;
+  min-height: 380px;
   overflow: hidden;
   background: var(--bg-elevated);
 }
@@ -152,59 +152,12 @@
     linear-gradient(90deg, hsla(var(--bg-hsl), 0.32), transparent 28%, transparent 70%, hsla(var(--bg-hsl), 0.18));
 }
 
-.team-profile__number,
-.team-profile__status {
-  position: absolute;
-  inset-block-start: var(--space-5);
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  border: 1px solid hsla(var(--text-primary-hsl), 0.13);
-  background: hsla(var(--bg-hsl), 0.55);
-  box-shadow: 0 8px 24px hsla(var(--bg-hsl), 0.25);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.team-profile__number {
-  inset-inline-start: var(--space-5);
-  min-width: 42px;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  color: hsla(var(--text-primary-hsl), 0.72);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-}
-
-.team-profile__status {
-  inset-inline-end: var(--space-5);
-  gap: 0.45rem;
-  padding-inline: 0.75rem;
-  border-radius: var(--radius-full);
-  color: hsla(var(--text-primary-hsl), 0.76);
-  font-family: var(--font-en);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.team-profile__status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 0 4px hsla(var(--primary-hsl), 0.16), 0 0 14px var(--primary);
-}
-
 .team-profile__content {
   position: relative;
   z-index: 3;
-  display: grid;
-  gap: var(--space-5);
-  padding: clamp(1.5rem, 4vw, 2.4rem);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.35rem, 3vw, 1.85rem);
   margin-block-start: -1px;
   background:
     linear-gradient(135deg, hsla(var(--primary-hsl), 0.045), transparent 42%),
@@ -213,14 +166,8 @@
 
 .team-profile__identity {
   display: grid;
-  gap: 0.3rem;
-}
-
-.team-profile__eyebrow {
-  color: var(--primary);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  width: 100%;
+  gap: var(--space-4);
 }
 
 .team-profile__name {
@@ -233,28 +180,26 @@
 
 .team-profile__role {
   width: fit-content;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid hsla(var(--primary-hsl), 0.16);
+  border-radius: var(--radius-full);
   color: hsla(var(--text-primary-hsl), 0.62);
-  font-family: var(--font-en);
+  font-family: var(--font-ar);
   font-size: clamp(0.75rem, 1.1vw, 0.86rem);
   font-weight: 500;
-  letter-spacing: 0.015em;
-  text-align: left;
+  letter-spacing: 0;
+  line-height: 1.55;
+  text-align: start;
+  background: hsla(var(--primary-hsl), 0.06);
 }
 
-.team-profile__footer {
+.team-profile__meta {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--space-4);
-  padding-block-start: var(--space-4);
   border-block-start: 1px solid hsla(var(--text-primary-hsl), 0.08);
-}
-
-.team-profile__description {
-  max-width: 33ch;
-  color: var(--text-secondary);
-  font-size: clamp(0.83rem, 1.1vw, 0.94rem);
-  line-height: 1.75;
+  padding-block-start: var(--space-4);
 }
 
 .team-profile__mark-wrap {
@@ -315,11 +260,11 @@
   }
 
   .team-profile__surface {
-    min-height: 560px;
+    min-height: 510px;
   }
 
   .team-profile__media {
-    min-height: 380px;
+    min-height: 350px;
   }
 }
 
@@ -330,11 +275,11 @@
   }
 
   .team-profile__surface {
-    min-height: 590px;
+    min-height: 530px;
   }
 
   .team-profile__media {
-    min-height: 410px;
+    min-height: 370px;
   }
 }
 
@@ -344,12 +289,12 @@
   }
 
   .team-profile__surface {
-    min-height: 520px;
+    min-height: 490px;
     border-radius: 1.35rem;
   }
 
   .team-profile__media {
-    min-height: 345px;
+    min-height: 330px;
   }
 
   .team-profile__content {
@@ -357,18 +302,6 @@
     padding: var(--space-5);
   }
 
-  .team-profile__number,
-  .team-profile__status {
-    inset-block-start: var(--space-4);
-  }
-
-  .team-profile__number {
-    inset-inline-start: var(--space-4);
-  }
-
-  .team-profile__status {
-    inset-inline-end: var(--space-4);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

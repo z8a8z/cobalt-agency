@@ -299,6 +299,13 @@
   filter: saturate(0.86) contrast(1.07) brightness(0.8);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .visit-cta.visible .visit-cta__image {
+    animation: visit-camera-idle 20s cubic-bezier(0.45, 0, 0.55, 1) 1.5s infinite alternate;
+    will-change: transform;
+  }
+}
+
 .visit-cta__image-shade {
   position: absolute;
   inset: 0;
@@ -411,6 +418,18 @@
   100% {
     opacity: 1;
     transform: translateY(0) rotate(-45deg) scale(1);
+  }
+}
+
+@keyframes visit-camera-idle {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.025);
+  }
+  52% {
+    transform: translate3d(-1.2%, -0.7%, 0) scale(1.045);
+  }
+  100% {
+    transform: translate3d(0.8%, 0.45%, 0) scale(1.035);
   }
 }
 
@@ -533,6 +552,7 @@
 
   .visit-cta__image,
   .visit-cta.visible .visit-cta__image {
+    animation: none;
     transform: scale(1.025);
   }
 }

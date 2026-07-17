@@ -1,242 +1,95 @@
-/* ═══════════════════════════════════════════════════════
-   Services Section — Bento Grid Layout
-   ═══════════════════════════════════════════════════════ */
+/* Services — five project types */
+.services { overflow: hidden; }
 
-/* ── Section Header ── */
 .services-header {
-  text-align: center;
+  max-width: 44rem;
+  margin-inline: auto;
   margin-block-end: var(--space-8);
+  text-align: center;
 }
 
-.services-header h2 {
-  margin-block-start: var(--space-3);
-}
+.services-header h2 { margin-block: var(--space-3) var(--space-4); }
+.services-header p { color: var(--text-secondary); }
 
-/* ── Bento Grid ── */
 .services-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  align-items: stretch;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-5);
 }
 
-@media (max-width: 768px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ── Service Card ── */
 .service-card {
   display: flex;
+  grid-column: span 2;
+  min-height: 360px;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
   overflow: hidden;
+  padding: clamp(1.35rem, 2.8vw, 2rem);
+  border: 1px solid var(--border);
+  border-block-start: 2px solid var(--primary);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, hsla(var(--primary-hsl), 0.09), transparent 48%), var(--card);
+  transition: transform var(--duration-normal) var(--ease-smooth), border-color var(--duration-normal) var(--ease-smooth), box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.service-card:nth-child(4), .service-card:nth-child(5) { grid-column: span 3; }
+
+.service-card:hover {
+  border-color: hsla(var(--primary-hsl), 0.48);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-elevation);
+}
+
+.service-card-content { position: relative; z-index: 1; }
+.service-card-header { display: flex; align-items: center; gap: var(--space-2); margin-block-end: var(--space-3); }
+.service-card-icon { width: 1.5rem; height: 1.5rem; flex: none; color: var(--primary); }
+.service-card-subtitle { color: var(--text-secondary); font-size: .82rem; }
+.service-card h3 { margin: 0 0 var(--space-3); font-family: var(--font-ar); font-size: clamp(1.32rem, 2vw, 1.6rem); letter-spacing: -.025em; text-align: start; }
+.service-card p { max-width: 37ch; color: var(--text-secondary); font-size: .95rem; line-height: 1.8; }
+
+.service-visual {
   position: relative;
-  direction: rtl;
-  text-align: right;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.service-card.card,
-.service-card.card:hover {
-  transform: none;
-  background: var(--card);
-  box-shadow: none;
-}
-
-.service-card-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: right;
-  width: 100%;
-}
-
-.service-card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-block-end: var(--space-2);
-  width: 100%;
-}
-
-.service-card-icon {
-  color: var(--primary);
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-}
-
-.service-card-subtitle {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 400;
-}
-
-.service-card h3 {
-  margin-block-start: var(--space-1);
-}
-
-.service-card p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-/* ── Mockup Images ── */
-.service-card-mockup {
+  min-height: 150px;
   margin-block-start: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: 2;
-  width: 100%;
-}
-
-/* Bio Link card: display vertical smartphone */
-.service-card-mockup--biolink {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-block-start: var(--space-4);
-  margin-inline: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
-  margin-block-end: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
-  width: calc(100% + 2 * clamp(1.5rem, 3vw, 2.5rem));
   overflow: hidden;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  min-height: 380px;
-  position: relative;
-  background: #040815; /* Symmetrical background with Card 2 */
-  border-top: 1px solid var(--border);
+  border: 1px solid hsla(var(--text-primary-hsl), .11);
+  border-radius: var(--radius-md);
+  background: hsl(var(--primary-hue), 18%, 6%);
+  box-shadow: inset 0 1px 0 hsla(var(--text-primary-hsl), .05), 0 18px 34px hsla(var(--bg-hsl), .38);
 }
 
-/* Ambient glow & grid lines to match Card 2's canvas */
-.biolink-mockup-ambient {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, hsla(var(--primary-hsl), 0.15), transparent 70%);
-  z-index: 1;
-  pointer-events: none;
+.service-visual::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 78% 0%, hsla(var(--primary-hsl), .24), transparent 35%); }
+.service-visual__topbar { display: flex; gap: 5px; align-items: center; height: 26px; padding-inline: 10px; border-block-end: 1px solid hsla(var(--text-primary-hsl), .09); }
+.service-visual__topbar i { width: 5px; height: 5px; border-radius: 50%; background: hsla(var(--text-primary-hsl), .3); }
+.service-visual__body { display: flex; flex-direction: column; gap: 8px; padding: 17px; }
+.service-visual__eyebrow, .service-visual__title, .service-visual__copy, .service-visual__content > span { display: block; border-radius: 999px; background: hsla(var(--text-primary-hsl), .2); }
+.service-visual__eyebrow { width: 27%; height: 5px; background: var(--primary); }
+.service-visual__title { width: 63%; height: 10px; background: hsla(var(--text-primary-hsl), .7); }
+.service-visual__copy { width: 82%; height: 5px; }
+.service-visual__copy--short { width: 48%; }
+.service-visual__content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-block-start: 6px; }
+.service-visual__content > span { height: 37px; background: linear-gradient(135deg, hsla(var(--primary-hsl), .38), hsla(var(--text-primary-hsl), .09)); }
+
+.service-visual--portfolio .service-visual__content { grid-template-columns: repeat(4, 1fr); }
+.service-visual--portfolio .service-visual__content > span:nth-child(2), .service-visual--portfolio .service-visual__content > span:nth-child(3) { height: 58px; }
+.service-visual--cv { width: 64%; margin-inline: auto; }
+.service-visual--cv .service-visual__content { grid-template-columns: 1fr; }
+.service-visual--cv .service-visual__content > span { height: 6px; }
+.service-visual--enrollment .service-visual__content { grid-template-columns: 1fr; }
+.service-visual--enrollment .service-visual__content > span { height: 18px; background: hsla(var(--text-primary-hsl), .12); }
+.service-visual--enrollment .service-visual__content > span:last-child { width: 38%; background: var(--primary); }
+.service-visual--profile .service-visual__content { grid-template-columns: 1fr 1.6fr; }
+.service-visual--profile .service-visual__content > span:first-child { grid-row: span 2; height: 80px; border-radius: var(--radius-sm); }
+.service-visual--profile .service-visual__content > span { height: 34px; }
+
+@media (max-width: 900px) {
+  .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .service-card, .service-card:nth-child(4), .service-card:nth-child(5) { grid-column: span 1; }
+  .service-card:last-child { grid-column: 1 / -1; }
 }
 
-.biolink-mockup-grid {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 20px 20px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.biolink-phone {
-  position: relative;
-  width: clamp(140px, 42%, 190px);
-  aspect-ratio: 0.515;
-  margin: 0 auto;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-
-.biolink-phone-body {
-  position: absolute;
-  inset: 0;
-  padding: 5.3%;
-  border-radius: 32px;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.15), transparent 18%),
-    linear-gradient(150deg, #1b202e, #070912 60%, #111622);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
-    inset 1px 1px 0 rgba(255, 255, 255, 0.1),
-    0 16px 36px rgba(0, 0, 0, 0.5),
-    0 0 24px hsla(var(--primary-hue), var(--primary-saturation), var(--primary-lightness), 0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.biolink-phone-screen {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 22px;
-  background: #050505;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
-  display: flex;
-  flex-direction: column;
-}
-
-.biolink-phone-speaker {
-  position: absolute;
-  z-index: 20;
-  left: 50%;
-  top: 2.9%;
-  width: 29%;
-  height: 2.3%;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: #020308;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.biolink-phone-button {
-  position: absolute;
-  right: -1.8%;
-  top: 24%;
-  width: 2.1%;
-  height: 12%;
-  border-radius: 0 3px 3px 0;
-  background: #252b39;
-}
-
-.biolink-loop-frame {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  background: transparent;
-  pointer-events: none;
-}
-
-/* QR card: bleed to card edges on all sides except top */
-.service-card-mockup--qr {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-block-start: var(--space-4);
-  margin-inline: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
-  margin-block-end: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
-  width: calc(100% + 2 * clamp(1.5rem, 3vw, 2.5rem));
-  overflow: hidden;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  min-height: 0;
-}
-
-/* The actual web component host — full bleed, transparent background */
-.qr-embed-host {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 0;
-  height: 100%;
-}
-
-/* Override the web component's own background so it blends with the card */
-.qr-embed-host qr-menu-loop,
-.service-card-mockup--qr qr-menu-loop {
-  --qml-bg: transparent;
-  display: flex;
-  flex: 1;
-  width: 100%;
-  height: 100%;
+@media (max-width: 620px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card, .service-card:last-child { grid-column: span 1; min-height: 0; }
+  .service-visual { min-height: 136px; }
 }

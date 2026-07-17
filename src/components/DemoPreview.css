@@ -1,186 +1,30 @@
-/* ═══════════════════════════════════════════════════════
-   DemoPreview — Live demo showcase section
-   ═══════════════════════════════════════════════════════ */
-
-.demo-preview {
-  text-align: center;
-  overflow: hidden;
-}
-
-.demo-preview__subtitle {
-  margin-block-start: var(--space-3);
-  margin-block-end: var(--space-6);
-}
-
-/* ── Tabs Selector ── */
-.demo-preview__tabs {
-  display: inline-flex;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  padding: 4px;
-  border-radius: var(--radius-full);
-  margin-block-end: var(--space-8);
-  gap: 4px;
-}
-
-.demo-preview__tab {
-  padding: var(--space-2) var(--space-5);
-  border-radius: var(--radius-full);
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-family: var(--font-ar);
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-smooth),
-              color var(--duration-fast) var(--ease-smooth);
-}
-
-.demo-preview__tab:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.demo-preview__tab--active {
-  background: var(--primary);
-  color: var(--text-primary);
-}
-
-/* ── Track Wrapper (Bleeds to the viewport edges) ── */
-.demo-preview__track-wrapper,
-.demo-preview__qr-track-wrapper {
-  position: relative;
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  overflow: hidden;
-  padding-block: var(--space-4);
-}
-
-/* ── Horizontal Scrolling Track (shared for both Bio & QR) ── */
-.demo-preview__track,
-.demo-preview__qr-track {
-  display: flex;
-  gap: var(--space-8);
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scroll-snap-type: inline proximity;
-  scroll-behavior: smooth;
-  /* Centering formula: 50vw center line - half of phone width (180px) */
-  padding-inline: calc(50vw - 180px); 
-  padding-block: var(--space-8) var(--space-10);
-  -ms-overflow-style: none; /* hide scrollbars */
-  scrollbar-width: none;
-}
-
-.demo-preview__track::-webkit-scrollbar,
-.demo-preview__qr-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* ── Individual Phone frames inside the track ── */
-.demo-preview__phone-wrapper {
-  width: 360px;
-  height: 740px;
-  flex-shrink: 0;
-  display: block;
-  position: relative;
-  transform-origin: center center;
-  transform: scale(0.85); /* shrunk by default */
-  opacity: 0.4; /* faded by default */
-  transition: transform var(--duration-normal) var(--ease-smooth),
-              opacity var(--duration-normal) var(--ease-smooth);
-  cursor: pointer;
-  scroll-snap-align: center;
-}
-
-.demo-preview__phone-wrapper:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: var(--space-2);
-}
-
-/* Focused centered phone zooms in and becomes fully opaque */
-.demo-preview__phone-wrapper--focused {
-  transform: scale(1.03);
-  opacity: 1;
-  z-index: 10;
-}
-
-.demo-preview__iframe-phone {
-  width: 100%;
-  height: 100%;
-  border: none;
-  overflow: hidden;
-  display: block;
-  border-radius: var(--radius-xl);
-}
-
-.demo-preview__phone-placeholder {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(145deg, hsla(var(--primary-hsl), 0.16), transparent 42%),
-    var(--bg-elevated);
-}
-
-/* ── Ambient Glow ── */
-.demo-preview__glow {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.demo-preview__glow::before {
-  content: '';
-  width: clamp(280px, 50vw, 500px);
-  height: clamp(280px, 50vw, 500px);
-  border-radius: var(--radius-full);
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-  filter: blur(100px);
-}
-
-/* ── Responsive adjustments ── */
-
-/* Tablet (~768px) — wrapper scaled to 0.85, center pad adjusted */
-@media (max-width: 768px) {
-  .demo-preview__phone-wrapper {
-    transform: scale(0.72);
-  }
-  
-  .demo-preview__phone-wrapper--focused {
-    transform: scale(0.88);
-  }
-  
-  .demo-preview__track,
-  .demo-preview__qr-track {
-    /* Tablet: wrapper scaled to ~0.85x → 360 * 0.85 / 2 ≈ 153px */
-    padding-inline: calc(50vw - 153px);
-    gap: var(--space-4);
-  }
-}
-
-/* Mobile (~480px) — wrapper scaled to 0.75, center pad adjusted */
-@media (max-width: 480px) {
-  .demo-preview__phone-wrapper {
-    transform: scale(0.6);
-  }
-  
-  .demo-preview__phone-wrapper--focused {
-    transform: scale(0.75);
-  }
-  
-  .demo-preview__track,
-  .demo-preview__qr-track {
-    /* Mobile: wrapper scaled to ~0.75x → 360 * 0.75 / 2 = 135px */
-    padding-inline: calc(50vw - 135px);
-    gap: var(--space-2);
-  }
-}
+.demo-preview { overflow: hidden; background: linear-gradient(180deg, transparent, hsla(var(--primary-hsl), .035), transparent); }
+.demo-preview__header { max-width: 45rem; margin: 0 auto var(--space-8); text-align: center; }
+.demo-preview__header h2 { margin-block: var(--space-3) var(--space-4); }
+.demo-preview__header p { color: var(--text-secondary); }
+.demo-preview__grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-5); }
+.demo-preview__card { grid-column: span 2; min-width: 0; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); }
+.demo-preview__card:nth-child(4), .demo-preview__card:nth-child(5) { grid-column: span 3; }
+.demo-preview__frame { min-height: 170px; overflow: hidden; border: 1px solid hsla(var(--text-primary-hsl), .1); border-radius: var(--radius-md); background: hsl(var(--primary-hue), 18%, 6%); }
+.demo-preview__frame-bar { display: flex; align-items: center; gap: 5px; height: 26px; padding-inline: 10px; border-block-end: 1px solid hsla(var(--text-primary-hsl), .08); }
+.demo-preview__frame-bar i { width: 5px; height: 5px; border-radius: 50%; background: hsla(var(--text-primary-hsl), .32); }
+.demo-preview__frame-body { display: flex; flex-direction: column; gap: 8px; padding: 18px; }
+.demo-preview__frame-body > span, .demo-preview__frame-body > strong, .demo-preview__frame-body > em { display: block; border-radius: 99px; }
+.demo-preview__frame-body > span { width: 24%; height: 5px; background: var(--primary); }
+.demo-preview__frame-body > strong { width: 65%; height: 12px; background: hsla(var(--text-primary-hsl), .7); }
+.demo-preview__frame-body > em { width: 83%; height: 5px; background: hsla(var(--text-primary-hsl), .2); }
+.demo-preview__frame-body > em + em { width: 54%; }
+.demo-preview__frame-body > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-block-start: 5px; }
+.demo-preview__frame-body b { display: block; height: 40px; border-radius: 8px; background: linear-gradient(140deg, hsla(var(--primary-hsl), .38), hsla(var(--text-primary-hsl), .08)); }
+.demo-preview__card:nth-child(2) .demo-preview__frame-body b:nth-child(2) { transform: translateY(15px); }
+.demo-preview__card:nth-child(3) .demo-preview__frame { width: 64%; margin-inline: auto; }
+.demo-preview__card:nth-child(4) .demo-preview__frame-body > div { grid-template-columns: 1fr; }
+.demo-preview__card:nth-child(4) .demo-preview__frame-body b { height: 13px; background: hsla(var(--text-primary-hsl), .12); }
+.demo-preview__card:nth-child(5) .demo-preview__frame-body > div { grid-template-columns: .75fr 1.5fr; }
+.demo-preview__card:nth-child(5) .demo-preview__frame-body b:first-child { grid-row: span 2; height: 86px; }
+.demo-preview__copy { padding: var(--space-4) var(--space-1) var(--space-1); }
+.demo-preview__copy > span { color: var(--primary); font-family: var(--font-mono); font-size: .73rem; }
+.demo-preview__copy h3 { margin-block: var(--space-2); font-family: var(--font-ar); font-size: 1.18rem; letter-spacing: -.025em; text-align: start; }
+.demo-preview__copy p { color: var(--text-secondary); font-size: .9rem; line-height: 1.75; }
+@media (max-width: 900px) { .demo-preview__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .demo-preview__card, .demo-preview__card:nth-child(4), .demo-preview__card:nth-child(5) { grid-column: span 1; } .demo-preview__card:last-child { grid-column: 1 / -1; } }
+@media (max-width: 620px) { .demo-preview__grid { grid-template-columns: 1fr; } .demo-preview__card, .demo-preview__card:last-child { grid-column: span 1; } }

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   Process — clear, static three-step system
+   Process — clear, static four-step system
    ═══════════════════════════════════════════════════════ */
 
 .process {
@@ -58,7 +58,7 @@
 .process-steps {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(1rem, 2.6vw, 2rem);
   margin: 0;
   padding: 0;
@@ -70,7 +70,7 @@
   position: absolute;
   z-index: 0;
   inset-block-start: 55px;
-  inset-inline: calc(16.6667% + 1.3rem);
+  inset-inline: calc(12.5% + 1.3rem);
   height: 2px;
   border-radius: 999px;
   background: hsla(var(--primary-hsl), 0.1);
@@ -100,7 +100,7 @@
 
 .process-step__surface {
   position: relative;
-  min-height: 285px;
+  min-height: 260px;
   overflow: hidden;
   padding: 1.25rem;
   border: 1px solid hsla(var(--primary-hsl), 0.22);

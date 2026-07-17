@@ -9,18 +9,23 @@ interface ProcessStep {
 const STEPS: ProcessStep[] = [
   {
     number: '1',
-    title: 'تواصل معنا',
-    description: 'كلمنا على واتساب وخبرنا عن عملك.',
+    title: 'نحدد الهدف',
+    description: 'نسمع لفكرتك، جمهورك، والنتيجة التي تريد الوصول لها.',
   },
   {
     number: '2',
-    title: 'نبني صفحتك',
-    description: 'نصمم ونبني صفحتك خلال 48 ساعة.',
+    title: 'نرتب المحتوى',
+    description: 'نحوّل معلوماتك إلى رسالة واضحة وهيكل سهل التصفح.',
   },
   {
     number: '3',
-    title: 'انطلق',
-    description: 'صفحتك جاهزة — شاركها مع زبائنك.',
+    title: 'نصمم ونبني',
+    description: 'نصنع تجربة رقمية متناسقة مع هوية عملك وأهدافه.',
+  },
+  {
+    number: '4',
+    title: 'نراجع ونطلق',
+    description: 'نراجع التفاصيل معك ثم نجهّز المشروع للمشاركة بثقة.',
   },
 ];
 
@@ -56,6 +61,17 @@ function StepIcon({ index }: StepIconProps) {
     );
   }
 
+  if (index === 2) {
+    return (
+      <span className="process-icon-wrapper process-icon-web">
+        <svg viewBox="0 0 24 24" className="base-icon" aria-hidden="true">
+          <path d="M4 4h16v16H4z" />
+          <path d="M8 8h8M8 12h5M8 16h7" />
+        </svg>
+      </span>
+    );
+  }
+
   return (
     <span className="process-icon-wrapper process-icon-rocket">
       <svg viewBox="0 0 24 24" className="base-icon rocket-svg-element" aria-hidden="true">
@@ -78,7 +94,7 @@ function Process() {
       <div className="container process__container">
         <div className="process-header">
           <span className="badge">العملية</span>
-          <h2>3 خطوات وتنطلق</h2>
+          <h2>من الفكرة إلى الإطلاق</h2>
         </div>
 
         <div className="process-steps-wrap">

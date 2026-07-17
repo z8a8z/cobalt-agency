@@ -9,28 +9,20 @@ import TeamCards from './components/TeamCards'
 import VisitCta from './components/VisitCta'
 import Footer from './components/Footer'
 import IntroOverlay from './components/IntroOverlay'
-import FloatingBot from './components/FloatingBot'
-import PerformanceDashboard from './components/PerformanceDashboard'
-import MaintenancePage from './components/MaintenancePage'
-import { MAINTENANCE_MODE } from './config/site'
 
 function App() {
-  if (MAINTENANCE_MODE) {
-    return <MaintenancePage />
-  }
-
-  return <LiveSite />
-}
-
-function LiveSite() {
-  const [introActive, setIntroActive] = useState(true);
+  const [introActive, setIntroActive] = useState(
+    () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
 
   useEffect(() => {
+    if (!introActive) return undefined;
+
     const timer = setTimeout(() => {
       setIntroActive(false);
-    }, 3000);
+    }, 2150);
     return () => clearTimeout(timer);
-  }, []);
+  }, [introActive]);
 
   return (
     <div className={introActive ? 'intro-active' : 'intro-done'}>
@@ -46,8 +38,6 @@ function LiveSite() {
         <VisitCta />
       </main>
       <Footer />
-      <FloatingBot paused={introActive} />
-      {import.meta.env.DEV && <PerformanceDashboard />}
     </div>
   )
 }

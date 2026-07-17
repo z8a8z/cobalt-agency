@@ -9,7 +9,6 @@ import './TeamCards.css';
 type TeamMember = {
   name: string;
   role: string;
-  description: string;
   image: string;
   imagePosition: string;
   delayClass: string;
@@ -18,24 +17,21 @@ type TeamMember = {
 const teamMembers: TeamMember[] = [
   {
     name: 'عبد العزيز عبد الله',
-    role: 'founder, CTO, & CPO',
-    description: 'المؤسس، المدير التقني ورئيس المنتجات',
+    role: 'المؤسس، المدير التقني ورئيس المنتجات',
     image: abdalazizImage,
     imagePosition: '50% 30%',
     delayClass: 'reveal-delay-1',
   },
   {
     name: 'إبراهيم محمد',
-    role: 'CEO, & CCO',
-    description: 'المدير التنفيذي ورئيس الاتصالات',
+    role: 'المدير التنفيذي ورئيس الاتصالات',
     image: ibrahimImage,
     imagePosition: '50% 32%',
     delayClass: 'reveal-delay-2',
   },
   {
     name: 'عبد المجيد عبد الله',
-    role: 'Operations, CRM',
-    description: 'مدير العمليات، مدير علاقات العملاء',
+    role: 'مدير العمليات وعلاقات العملاء',
     image: abdalmajidImage,
     imagePosition: '50% 30%',
     delayClass: 'reveal-delay-3',
@@ -82,16 +78,12 @@ function TeamMemberCard({ member, index }: TeamMemberCardProps) {
             <h3 id={`team-member-${index}`} className="team-profile__name">
               {member.name}
             </h3>
-            <p className="team-profile__role" dir="ltr">
-              {member.role}
-            </p>
-          </div>
-
-          <div className="team-profile__footer">
-            <p className="team-profile__description">{member.description}</p>
-            <span className="team-profile__mark-wrap">
-              <TeamMemberMark />
-            </span>
+            <div className="team-profile__meta">
+              <p className="team-profile__role">{member.role}</p>
+              <span className="team-profile__mark-wrap">
+                <TeamMemberMark />
+              </span>
+            </div>
           </div>
         </div>
 

@@ -211,8 +211,7 @@
   margin: 0;
 }
 
-.brand-en,
-.brand-ar {
+.intro-overlay__brand {
   display: block;
   opacity: 0;
   transform: translateY(16px);
@@ -222,30 +221,20 @@
   will-change: transform, opacity;
 }
 
-.brand-en {
-  font-family: var(--font-en);
+.intro-overlay__brand {
+  font-family: var(--font-ar);
   font-size: clamp(2rem, 5vw, 2.7rem);
-  font-weight: 750;
-  letter-spacing: 0.045em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1.15;
   background: linear-gradient(125deg, var(--text-primary) 8%, hsl(var(--primary-hue), 100%, 68%) 58%, var(--primary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition-delay: 50ms;
+  transition-delay: 100ms;
 }
 
-.brand-ar {
-  font-family: var(--font-ar);
-  font-size: clamp(0.95rem, 2vw, 1.12rem);
-  font-weight: 500;
-  letter-spacing: 0.015em;
-  color: var(--text-secondary);
-  transition-delay: 150ms;
-}
-
-.intro-overlay--text-visible .brand-en,
-.intro-overlay--text-visible .brand-ar {
+.intro-overlay--text-visible .intro-overlay__brand {
   opacity: 1;
   transform: translateY(0);
 }

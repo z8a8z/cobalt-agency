@@ -8,9 +8,9 @@ export default function IntroOverlay() {
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    const logoTimer = window.setTimeout(() => setLogoVisible(true), 160);
-    const textTimer = window.setTimeout(() => setTextVisible(true), 690);
-    const exitTimer = window.setTimeout(() => setIsFadingOut(true), 2350);
+    const logoTimer = window.setTimeout(() => setLogoVisible(true), 120);
+    const textTimer = window.setTimeout(() => setTextVisible(true), 460);
+    const exitTimer = window.setTimeout(() => setIsFadingOut(true), 1650);
 
     return () => {
       window.clearTimeout(logoTimer);
@@ -43,8 +43,7 @@ export default function IntroOverlay() {
         </div>
 
         <p className="intro-overlay__title">
-          <span className="brand-en">Cobalt Agency</span>
-          <span className="brand-ar">وكالة كوبالت</span>
+          <span className="intro-overlay__brand">وكالة كوبالت</span>
         </p>
 
         <div className="intro-overlay__progress" aria-hidden="true">

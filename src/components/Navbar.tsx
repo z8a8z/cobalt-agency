@@ -10,7 +10,7 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   { label: 'الرئيسية', href: '#hero' },
   { label: 'خدماتنا', href: '#services' },
-  { label: 'الأسعار', href: '#pricing' },
+  { label: 'نطاق المشروع', href: '#pricing' },
   { label: 'من نحن', href: '#about' },
 ];
 

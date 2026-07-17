@@ -1,133 +1,108 @@
-import { useEffect, useRef } from 'react';
-import { useElementInView } from '../hooks/useElementInView';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import './QrMenuLoop/qr-menu-loop.js';
 import './Services.css';
 
-function Services() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const card1Ref = useScrollReveal<HTMLDivElement>();
-  const card2Ref = useScrollReveal<HTMLDivElement>();
-  const isPreviewActive = useElementInView(sectionRef, { rootMargin: '100px 0px' });
-  const qrContainerRef = useRef<HTMLDivElement>(null);
+type ServiceKind = 'website' | 'portfolio' | 'cv' | 'enrollment' | 'profile';
 
-  useEffect(() => {
-    const container = qrContainerRef.current;
+interface Service {
+  description: string;
+  kind: ServiceKind;
+  label: string;
+  title: string;
+}
 
-    if (!container) return;
+const SERVICES: Service[] = [
+  {
+    kind: 'website',
+    label: 'موقع متكامل',
+    title: 'موقع إلكتروني متكامل',
+    description: 'موقع متكامل يعرّف بخدمتك، يوضح قيمتك، ويعطي العميل طريقاً واضحاً للتواصل معك.',
+  },
+  {
+    kind: 'portfolio',
+    label: 'عرض أعمالك',
+    title: 'معرض أعمال إبداعي',
+    description: 'معرض أعمال بصري يضع مشاريعك في الواجهة ويجعل جودة شغلك واضحة من أول زيارة.',
+  },
+  {
+    kind: 'cv',
+    label: 'هويتك المهنية',
+    title: 'سيرة ذاتية رقمية',
+    description: 'سيرة ذاتية رقمية منظمة تعرض خبرتك، مهاراتك، وإنجازاتك برابط واحد سهل المشاركة.',
+  },
+  {
+    kind: 'enrollment',
+    label: 'تحويل الاهتمام إلى تسجيل',
+    title: 'صفحة تسجيل دورة أو ورشة',
+    description: 'صفحة مركزة لعرض تفاصيل الدورة أو الورشة واستقبال طلبات التسجيل بطريقة واضحة وسلسة.',
+  },
+  {
+    kind: 'profile',
+    label: 'تعريف مؤسسي',
+    title: 'بروفايل شركة رقمي',
+    description: 'بروفايل شركة رقمي يقدّم خدماتك، قصتك، وقدرات فريقك بشكل يليق بالاجتماعات والفرص الجديدة.',
+  },
+];
 
-    if (!isPreviewActive) {
-      container.replaceChildren();
-      return;
-    }
-
-    const qrMenu = document.createElement('qr-menu-loop');
-    qrMenu.setAttribute('speed', '1');
-    qrMenu.style.setProperty('--qml-bg', 'transparent');
-    qrMenu.style.width = '100%';
-    qrMenu.style.height = '100%';
-    qrMenu.style.flex = '1';
-    qrMenu.style.display = 'flex';
-    container.replaceChildren(qrMenu);
-
-    return () => container.replaceChildren();
-  }, [isPreviewActive]);
+function ServiceIcon({ kind }: { kind: ServiceKind }) {
+  const paths: Record<ServiceKind, React.ReactNode> = {
+    website: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 8h18M7 6h.01M10 6h.01M7 12h5M7 15h8" /></>,
+    portfolio: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="m7 15 3-3 2 2 3-4 3 5M7 8h.01" /></>,
+    cv: <><path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" /><path d="M14 3v5h5M8 13h6M8 17h4" /></>,
+    enrollment: <><path d="M4 4h16v16H4z" /><path d="M8 8h8M8 12h4M8 16h3M15 15l1.5 1.5L20 13" /></>,
+    profile: <><circle cx="12" cy="8" r="3" /><path d="M5 21v-1a7 7 0 0 1 14 0v1M4 4h16v16H4z" /></>,
+  };
 
   return (
-    <section id="services" className="section" ref={sectionRef}>
+    <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[kind]}
+    </svg>
+  );
+}
+
+function ServiceVisual({ kind }: { kind: ServiceKind }) {
+  return (
+    <div className={`service-visual service-visual--${kind}`} aria-hidden="true">
+      <div className="service-visual__topbar"><i /><i /><i /></div>
+      <div className="service-visual__body">
+        <span className="service-visual__eyebrow" />
+        <span className="service-visual__title" />
+        <span className="service-visual__copy" />
+        <span className="service-visual__copy service-visual__copy--short" />
+        <div className="service-visual__content">
+          <span /><span /><span /><span />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Services() {
+  const sectionRef = useScrollReveal<HTMLElement>();
+
+  return (
+    <section id="services" className="section services reveal" ref={sectionRef}>
       <div className="section-divider-line" aria-hidden="true" />
       <div className="container">
-        <div className="services-header reveal" ref={headerRef}>
+        <div className="services-header">
           <span className="badge">ماذا نقدم</span>
-          <h2>خدماتنا</h2>
+          <h2>حلول رقمية تُبنى حول هدفك</h2>
+          <p>من أول انطباع إلى أول تواصل، نبني صفحات احترافية تخدم العمل الذي تريد عرضه.</p>
         </div>
 
         <div className="services-grid">
-          <div
-            ref={card1Ref}
-            className="card accent-border-top service-card reveal reveal-delay-1"
-          >
-            <div className="service-card-content">
-              <div className="service-card-header">
-                <svg
-                  className="service-card-icon"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                </svg>
-                <span className="service-card-subtitle">وصلة رقمية ذكية</span>
-              </div>
-              <h3>صفحة Bio Link</h3>
-              <p>صفحة واحدة تجمع كل روابط عملك — سوشال ميديا، موقع، واتساب.</p>
-            </div>
-
-            <div className="service-card-mockup service-card-mockup--biolink">
-              <div className="biolink-mockup-ambient" aria-hidden="true" />
-              <div className="biolink-mockup-grid" aria-hidden="true" />
-              <div className="biolink-phone">
-                <div className="biolink-phone-body">
-                  <div className="biolink-phone-speaker" />
-                  <div className="biolink-phone-screen">
-                    {isPreviewActive && (
-                      <iframe
-                        src="/demos/bio-links/biolink_loop.html"
-                        className="biolink-loop-frame"
-                        title="معاينة صفحة Bio Link — تجربة تفاعلية"
-                        loading="lazy"
-                      />
-                    )}
-                  </div>
-                  <div className="biolink-phone-button" />
+          {SERVICES.map((service) => (
+            <article key={service.kind} className="service-card accent-border-top">
+              <div className="service-card-content">
+                <div className="service-card-header">
+                  <ServiceIcon kind={service.kind} />
+                  <span className="service-card-subtitle">{service.label}</span>
                 </div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
               </div>
-            </div>
-          </div>
-
-          <div
-            ref={card2Ref}
-            className="card accent-border-top service-card reveal reveal-delay-2"
-          >
-            <div className="service-card-content">
-              <div className="service-card-header">
-                <svg
-                  className="service-card-icon"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="3" height="3" rx="0.5" />
-                  <path d="M21 14h-3v3" />
-                  <path d="M14 21v-3h3" />
-                  <path d="M21 21h-3v-3" />
-                </svg>
-                <span className="service-card-subtitle">قائمة رقمية للطاولة</span>
-              </div>
-              <h3>قائمة QR ذكية</h3>
-              <p>قائمة طعام رقمية مع QR مطبوع — زبونك يمسح ويطلب.</p>
-            </div>
-            <div className="service-card-mockup service-card-mockup--qr">
-              <div ref={qrContainerRef} className="qr-embed-host" />
-            </div>
-          </div>
+              <ServiceVisual kind={service.kind} />
+            </article>
+          ))}
         </div>
       </div>
     </section>
