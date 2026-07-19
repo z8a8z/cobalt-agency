@@ -1,5 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "./assets/hha-logo.png";
+import heroVideo from "./assets/hha-hero.mp4";
+import heroPoster from "./assets/hha-hero-poster.webp";
+import deliveryVideo from "./assets/hha-delivery.mp4";
+import deliveryPoster from "./assets/hha-delivery-poster.webp";
+import { useSiteMotion } from "./useSiteMotion.js";
 
 const solutions = [
   { number: "01", title: "الشيبس والوجبات الخفيفة", text: "سلفان من طبقتين بطباعة عالية الوضوح وحماية مناسبة للمنتج." },
@@ -26,6 +31,13 @@ const process = [
   { step: "04", title: "نقص ونسلّم", text: "اتجاه طباعة ولف مضبوط، ورولات جاهزة للعمل مباشرة." },
 ];
 
+const logistics = [
+  { step: "01", title: "تغطية محلية", text: "توصيل إلى كافة المحافظات العراقية." },
+  { step: "02", title: "أسطول مجهز", text: "مركبات مجهزة وسائقون محترفون لسلامة وسرعة الوصول." },
+  { step: "03", title: "استلام مباشر", text: "طلبات جاهزة للاستلام بواسطة فرقكم اللوجستية." },
+  { step: "04", title: "توسع دولي", text: "خطط توسع دولي قيد التنفيذ." },
+];
+
 function Icon({ name, size = 22 }) {
   const paths = {
     arrow: <><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></>,
@@ -36,6 +48,7 @@ function Icon({ name, size = 22 }) {
     phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z"/>,
     mail: <><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></>,
     map: <><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></>,
+    truck: <><path d="M10 17h4V5H2v12h3"/><path d="M14 9h4l4 4v4h-3"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></>,
     menu: <><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></>,
     close: <><path d="m6 6 12 12"/><path d="m18 6-12 12"/></>,
   };
@@ -44,14 +57,17 @@ function Icon({ name, size = 22 }) {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const siteRef = useRef(null);
+  const headerRef = useRef(null);
+  const heroVideoRef = useRef(null);
+  const deliveryVideoRef = useRef(null);
+
+  useSiteMotion({ siteRef, headerRef, heroVideoRef, deliveryVideoRef });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    document.body.classList.toggle("menu-open", menuOpen);
+    return () => document.body.classList.remove("menu-open");
+  }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -69,22 +85,25 @@ function App() {
   };
 
   return (
-    <div className="site">
+    <div className="site" ref={siteRef}>
       <a className="skip-link" href="#main">انتقل إلى المحتوى</a>
-      <header className={`header ${scrolled ? "is-scrolled" : ""}`}>
+      <div className="scroll-progress" aria-hidden="true"><span className="scroll-progress__bar" /></div>
+
+      <header className="header" ref={headerRef}>
         <div className="container nav-wrap">
           <a className="brand" href="#top" aria-label="HHA Packaging - الصفحة الرئيسية" onClick={closeMenu}>
             <img src={logo} width="132" height="73" alt="HHA Packaging" />
             <span><b>HHA PACKAGING</b><small>عضو في مجموعة HHA Group</small></span>
           </a>
-          <nav className={`nav ${menuOpen ? "is-open" : ""}`} aria-label="التنقل الرئيسي">
+          <nav className={`nav ${menuOpen ? "is-open" : ""}`} id="primary-navigation" aria-label="التنقل الرئيسي">
             <a href="#about" onClick={closeMenu}>عن الشركة</a>
             <a href="#solutions" onClick={closeMenu}>حلولنا</a>
             <a href="#technology" onClick={closeMenu}>التقنيات</a>
             <a href="#quality" onClick={closeMenu}>الجودة</a>
+            <a href="#delivery" onClick={closeMenu}>التوصيل</a>
             <a className="nav-cta" href="#contact" onClick={closeMenu}>ابدأ طلبك <Icon name="arrow" size={18} /></a>
           </nav>
-          <button className="menu-button" type="button" aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>
+          <button className="menu-button" type="button" aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={() => setMenuOpen((value) => !value)}>
             <Icon name={menuOpen ? "close" : "menu"} />
           </button>
         </div>
@@ -92,35 +111,23 @@ function App() {
 
       <main id="main">
         <section className="hero" id="top">
-          <div className="hero-grid" aria-hidden="true" />
+          <video className="hero-background-video" ref={heroVideoRef} autoPlay loop muted playsInline preload="metadata" poster={heroPoster} aria-hidden="true">
+            <source src={heroVideo} type="video/mp4" />
+          </video>
           <div className="container hero-layout">
             <div className="hero-copy">
               <p className="eyebrow"><span /> حلول تغليف مرن من كركوك إلى العراق والمنطقة</p>
-              <h1>نحوّل جودة منتجك<br />إلى حضور <em>يُرى.</em></h1>
+              <h1><span className="hero-title-line"><span>نحوّل جودة منتجك</span></span><span className="hero-title-line"><span>إلى حضور <em>يُرى.</em></span></span></h1>
               <p className="hero-lead">من الطباعة الفلكسوغرافية والتصفيح متعدد الطبقات إلى القص والتجهيز النهائي؛ نمنح منتجك غلافاً يحميه ويُبرز علامتك بدقة.</p>
               <div className="hero-actions">
                 <a className="button primary" href="#contact">اطلب استشارة فنية <Icon name="arrow" size={19} /></a>
-                <a className="button text-button" href="tel:+9647701302524"><Icon name="phone" size={19} /> +964 770 130 25 24</a>
+                <a className="button text-button" href="tel:+9647701302524"><Icon name="phone" size={19} /> <span dir="ltr">+964 770 130 25 24</span></a>
               </div>
               <div className="hero-proof" aria-label="مؤشرات الإنتاج">
                 <div><strong>8</strong><span>ألوان طباعة</span></div>
                 <div><strong>3</strong><span>طبقات تصفيح</span></div>
                 <div><strong>7–14</strong><span>يوماً للتجهيز</span></div>
               </div>
-            </div>
-
-            <div className="hero-visual" aria-label="رسم تجريدي لرول التغليف المرن">
-              <div className="roll-scene">
-                <div className="roll-shadow" />
-                <div className="film-sheet">
-                  <span className="film-kicker">FLEXIBLE PACKAGING</span>
-                  <img src={logo} width="220" height="122" alt="" />
-                  <div className="film-lines"><span /><span /><span /></div>
-                  <b>PRINT · LAMINATE · SLIT</b>
-                </div>
-                <div className="roll-core"><span /></div>
-              </div>
-              <p className="visual-note"><span>مصمم لخط إنتاجك</span><b>Direction / Microns / Layers</b></p>
             </div>
           </div>
           <a className="scroll-cue" href="#about"><span>استكشف</span><i /></a>
@@ -136,6 +143,7 @@ function App() {
         </section>
 
         <section className="section about" id="about">
+          <span className="about-year" aria-hidden="true">2022</span>
           <div className="container split-layout">
             <div className="section-heading sticky-copy">
               <p className="eyebrow"><span /> منذ 2022</p>
@@ -153,17 +161,23 @@ function App() {
           </div>
         </section>
 
-        <section className="section solutions" id="solutions">
-          <div className="container">
-            <div className="section-intro">
+        <section className="solutions" id="solutions">
+          <div className="solutions-stage">
+            <div className="container section-intro">
               <div><p className="eyebrow light"><span /> حلولنا المتخصصة</p><h2>تغليف مدروس<br />لكل <em>منتج.</em></h2></div>
               <p>نختار المادة، السماكة، وخصائص الحماية بما يلائم طبيعة المنتج وطريقة عرضه وتشغيله.</p>
             </div>
-            <div className="solutions-grid">
-              {solutions.map((item) => <article className="solution-item" key={item.number}>
-                <span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p><a href="#contact" aria-label={`اطلب حلاً لفئة ${item.title}`}><Icon name="arrow" /></a>
-              </article>)}
+            <p className="solutions-swipe">اسحب أفقياً لاستكشاف الحلول</p>
+            <div className="solutions-viewport">
+              <div className="solutions-grid">
+                {solutions.map((item) => <article className="solution-item" key={item.number}>
+                  <span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p><a href="#contact" aria-label={`اطلب حلاً لفئة ${item.title}`}><Icon name="arrow" /></a>
+                </article>)}
+              </div>
             </div>
+            <div className="container solutions-progress" aria-hidden="true"><span className="solutions-progress-count">01 / 06</span><b><i /></b><small>مرّر لاكتشاف الحلول</small></div>
+          </div>
+          <div className="container solutions-custom-wrap">
             <div className="custom-solution">
               <div><span>حلول مخصصة</span><h3>منتجك خارج القالب؟</h3><p>فريقنا التقني جاهز لدراسة المواصفات واقتراح تركيبة تغليف مصممة بالكامل لاحتياجك.</p></div>
               <a className="button light-button" href="#contact">تحدث مع الفريق التقني <Icon name="arrow" size={19} /></a>
@@ -179,7 +193,7 @@ function App() {
               <p>سلسلة إنتاج مترابطة تضمن ثبات الجودة وسهولة التشغيل على خطوطكم.</p>
             </div>
             <div className="process-grid">
-              {process.map((item, index) => <div className="process-step" key={item.step}>
+              {process.map((item, index) => <div className="process-step" key={item.step} data-step={item.step}>
                 <div className="step-top"><span>{item.step}</span>{index < process.length - 1 && <i />}</div>
                 <h3>{item.title}</h3><p>{item.text}</p>
               </div>)}
@@ -197,6 +211,7 @@ function App() {
         </section>
 
         <section className="section specs" id="quality">
+          <div className="materials-ribbon" aria-hidden="true"><div className="materials-ribbon__track">BOPP · PET · CPP · LDPE · BOPP · PET · CPP · LDPE</div></div>
           <div className="container specs-layout">
             <div className="specs-copy">
               <p className="eyebrow"><span /> مواصفات دقيقة</p>
@@ -212,7 +227,31 @@ function App() {
           </div>
         </section>
 
+        <section className="logistics" id="delivery">
+          <div className="logistics-stage">
+            <video className="logistics-video" ref={deliveryVideoRef} loop muted playsInline preload="none" poster={deliveryPoster} data-lazy-video="true" aria-hidden="true">
+              <source src={deliveryVideo} type="video/mp4" />
+            </video>
+            <div className="container logistics-layout">
+              <div className="logistics-copy">
+                <span className="logistics-code" dir="ltr">HHA / LOGISTICS / IRAQ</span>
+                <p className="eyebrow"><span /> الخدمات اللوجستية والتوزيع</p>
+                <h2>من كركوك<br />إلى كل <em>محافظة.</em></h2>
+                <p>نتولى توصيل منتجاتكم إلى كافة المحافظات العراقية عبر أسطول مركبات مجهزة وسائقين محترفين، مع تجهيز الطلبيات أيضاً للاستلام المباشر بواسطة فرقكم اللوجستية.</p>
+                <a className="button primary" href="#contact">نسّق عملية التوصيل <Icon name="truck" size={20} /></a>
+              </div>
+              <div className="logistics-points">
+                <span className="logistics-route-line" aria-hidden="true" />
+                {logistics.map((item) => <article className="logistics-point" key={item.step}>
+                  <span>{item.step}</span><div><h3>{item.title}</h3><p>{item.text}</p></div>
+                </article>)}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="section contact" id="contact">
+          <div className="contact-curtain" aria-hidden="true" />
           <div className="container contact-layout">
             <div className="contact-copy">
               <p className="eyebrow light"><span /> لنبدأ</p>
@@ -240,7 +279,7 @@ function App() {
       <footer className="footer">
         <div className="container footer-main">
           <a className="footer-brand" href="#top"><img src={logo} width="154" height="85" loading="lazy" alt="HHA Packaging" /><span>حلول تغليف مرن مصممة لحماية منتجك وإبراز علامتك.</span></a>
-          <div><b>روابط سريعة</b><a href="#about">عن الشركة</a><a href="#solutions">حلولنا</a><a href="#technology">التقنيات</a><a href="#quality">الجودة</a></div>
+          <div><b>روابط سريعة</b><a href="#about">عن الشركة</a><a href="#solutions">حلولنا</a><a href="#technology">التقنيات</a><a href="#delivery">التوصيل</a></div>
           <div><b>تواصل</b><a href="tel:+9647713333938" dir="ltr">+964 771 333 39 38</a><a href="tel:+9647714646405" dir="ltr">+964 771 464 64 05</a><a href="mailto:hr@hhagroup.co">hr@hhagroup.co</a><a href="https://www.hhagroup.co" target="_blank" rel="noreferrer">www.hhagroup.co</a></div>
         </div>
         <div className="container footer-bottom"><span>© {new Date().getFullYear()} HHA Packaging. جميع الحقوق محفوظة.</span><span>عضو في مجموعة HHA Group</span></div>
